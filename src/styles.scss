@@ -12,3 +12,9 @@ body {
 .no-padding { padding: 0 }
 .full-width { width: 100% }
 .text-right { text-align: right }
+.warning { background-color: #f54336 }
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px #212121 inset !important;
+}

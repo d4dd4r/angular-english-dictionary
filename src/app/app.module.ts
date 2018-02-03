@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppMaterialModule } from './app-material.module';
 
+import { UserService } from './services/user.service';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { MyComponent } from './components/my/my.component';
@@ -29,6 +31,9 @@ import { ExercisesComponent } from './components/my/exercises/exercises.componen
     ExercisesComponent,
     LoginComponent,
     MyComponent,
+  ],
+  providers: [
+    UserService,
   ],
   bootstrap: [ AppComponent ]
 })

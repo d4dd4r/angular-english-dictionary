@@ -6,6 +6,7 @@ import {
   MatInputModule,
   MatGridListModule,
   MatSidenavModule,
+  MatSnackBarModule,
 } from '@angular/material';
 
 @NgModule({
@@ -15,6 +16,7 @@ import {
     MatGridListModule,
     MatInputModule,
     MatSidenavModule,
+    MatSnackBarModule,
   ]
 })
 export class AppMaterialModule {}

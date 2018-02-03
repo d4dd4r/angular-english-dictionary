@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+
+import { UserService } from '../../services/user.service';
 
 import { Login } from '../../models/login.interface';
 
@@ -19,7 +22,7 @@ import { Login } from '../../models/login.interface';
                 <mat-error *ngIf="form.controls.email.invalid">{{ getErrorMessage('email') }}</mat-error>
               </mat-form-field>
               <mat-form-field class="full-width">
-                <input matInput placeholder="12345" formControlName="password" required>
+                <input matInput type="password" placeholder="12345" formControlName="password" required>
                 <mat-error *ngIf="form.controls.password.invalid">{{ getErrorMessage('password') }}</mat-error>
               </mat-form-field>
               <div class="full-width text-right">
@@ -40,7 +43,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-  ) {}
+    private userS: UserService,
+    private snackBar: MatSnackBar,
+  ) { }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -50,7 +55,11 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(login: Login) {
-    this.router.navigate(['my']);
+    if (this.userS.checkCredentials(login)) {
+      this.router.navigate(['my']);
+    } else {
+      this.openSnackBar('Email or Password is wrong!', 'Login');
+    }
   }
 
   getErrorMessage(type: string): string | void {
@@ -61,5 +70,12 @@ export class LoginComponent implements OnInit {
       if (this.form.get('password').hasError('required')) return 'You must enter a value';
       if (this.form.get('password').hasError('minlength')) return 'Minimum 5 characters';
     }
+  }
+
+  private openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+      panelClass: 'warning'
+    });
   }
 }
