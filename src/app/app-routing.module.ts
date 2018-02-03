@@ -7,7 +7,7 @@ import { DictionaryComponent } from './components/my/dictionary/dictionary.compo
 import { ExercisesComponent } from './components/my/exercises/exercises.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/my' },
+  { path: '', pathMatch: 'full', redirectTo: '/login' },
   { path: 'login', component: LoginComponent },
   {
     path: 'my',

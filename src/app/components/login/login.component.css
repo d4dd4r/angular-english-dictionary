@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  justify-content: center;
+}
+.form-container {
+  margin: 4px;
+  background-color: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
+}
+.form-container-title {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 8px 20px;
+  background-color: rgba(255, 255, 255, .03);
+}
+.form-container-body {
+  padding: 30px;
+}
