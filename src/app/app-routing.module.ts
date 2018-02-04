@@ -9,6 +9,7 @@ import { ExercisesComponent } from './components/my/exercises/exercises.componen
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
   { path: 'login', component: LoginComponent },
+  { path: 'my', redirectTo: '/my/dictionary', pathMatch: 'full' },
   {
     path: 'my',
     component: MyComponent,

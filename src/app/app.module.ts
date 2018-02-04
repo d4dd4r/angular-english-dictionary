@@ -14,6 +14,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MyComponent } from './components/my/my.component';
 import { DictionaryComponent } from './components/my/dictionary/dictionary.component';
 import { ExercisesComponent } from './components/my/exercises/exercises.component';
+import { NavbarComponent } from './components/my/navbar/navbar.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { ExercisesComponent } from './components/my/exercises/exercises.componen
     ExercisesComponent,
     LoginComponent,
     MyComponent,
+    NavbarComponent,
   ],
   providers: [
     UserService,

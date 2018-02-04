@@ -1,9 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NavbarLinks } from '../../models/navbar-links.class';
 
 @Component({
   template: `
-    <h2>MyComponent Works!</h2>
-    <router-outlet></router-outlet>
-  `,
+    <app-navbar [links]="links"></app-navbar>
+  `
 })
-export class MyComponent {}
+export class MyComponent implements OnInit {
+  public links: NavbarLinks[];
+
+  ngOnInit() {
+    this.links = [
+      new NavbarLinks('dictionary', 'Dictionary'),
+      new NavbarLinks('exercises', 'Exercises'),
+    ];
+  }
+}

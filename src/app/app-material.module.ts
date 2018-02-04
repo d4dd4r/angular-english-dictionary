@@ -7,14 +7,22 @@ import {
   MatGridListModule,
   MatSidenavModule,
   MatSnackBarModule,
+  MatCheckboxModule,
+  MatRadioModule,
+  MatIconModule,
+  MatMenuModule,
 } from '@angular/material';
 
 @NgModule({
   exports: [
     MatButtonModule,
+    MatCheckboxModule,
     MatFormFieldModule,
     MatGridListModule,
+    MatIconModule,
     MatInputModule,
+    MatMenuModule,
+    MatRadioModule,
     MatSidenavModule,
     MatSnackBarModule,
   ]
