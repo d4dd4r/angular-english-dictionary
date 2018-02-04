@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { MyComponent } from './components/my/my.component';
 import { DictionaryComponent } from './components/my/dictionary/dictionary.component';
 import { ExercisesComponent } from './components/my/exercises/exercises.component';
+import { LearnWordsComponent } from './components/my/exercises/learn-words/learn-words.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
@@ -16,6 +17,10 @@ const routes: Routes = [
     children: [
       { path: 'dictionary', component: DictionaryComponent },
       { path: 'exercises', component: ExercisesComponent },
+      { path: 'exercise', redirectTo: 'exercises', pathMatch: 'full' },
+      { path: 'exercise', children: [
+        { path: 'learn-words', component: LearnWordsComponent }
+      ] },
     ]
   },
   { path: '**', redirectTo: '/login' }

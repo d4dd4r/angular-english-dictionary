@@ -57,6 +57,7 @@ import { WordService } from '../../../services/word.service';
         </div>
       </mat-grid-tile>
     </mat-grid-list>
+    <router-outlet></router-outlet>
   `,
   styles: [`
     button.disabled { background-color: rgba(194, 24, 91, .5) }
@@ -75,13 +76,13 @@ export class ExercisesComponent {
   }
 
   onLearnWords() {
-    if (!this.isWordEnough()) return;
+    if (this.isWordEnough()) return;
 
-    // this.router.navigate([''])
+    this.router.navigate(['my', 'exercise', 'learn-words']);
   }
 
   isWordEnough(): boolean {
-    return this.wordCount <this.wordLimit;
+    return this.wordCount < this.wordLimit;
   }
 
 }

@@ -1,7 +1,5 @@
-// import { Injectable } from '@angular/core';
 import { Word } from '../models/word.class';
 
-// @Injectable()
 export class WordService {
   private _words: Word[] = [];
   private lastId = 0;
@@ -23,10 +21,11 @@ export class WordService {
       new Word('hammer',    ['молоток', 'молот']),
       new Word('smite',     ['поразить', 'кара']),
       new Word('bare',      ['голый', 'пустой']),
-      new Word('null',      ['недействительный', 'несуществующий']),
+      // new Word('null',      ['недействительный', 'несуществующий']),
       new Word('quash',     ['подавлять', 'сокрушить']),
       new Word('give up',   ['сдаваться', 'уступить']),
       new Word('reject',    ['отвергать', 'отклонять']),
+      new Word('throw',     ['выкидывать', 'выбрасывать']),
     ];
   }
 

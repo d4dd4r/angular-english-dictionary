@@ -15,9 +15,10 @@ import { WordDialogComponent } from './components/my/dictionary/word-dialog/word
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { MyComponent } from './components/my/my.component';
+import { NavbarComponent } from './components/my/navbar/navbar.component';
 import { DictionaryComponent } from './components/my/dictionary/dictionary.component';
 import { ExercisesComponent } from './components/my/exercises/exercises.component';
-import { NavbarComponent } from './components/my/navbar/navbar.component';
+import { LearnWordsComponent } from './components/my/exercises/learn-words/learn-words.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { NavbarComponent } from './components/my/navbar/navbar.component';
     AppComponent,
     DictionaryComponent,
     ExercisesComponent,
+    LearnWordsComponent,
     LoginComponent,
     MyComponent,
     NavbarComponent,
