@@ -11,16 +11,20 @@ import {
   MatRadioModule,
   MatIconModule,
   MatMenuModule,
+  MatListModule,
+  MatDialogModule,
 } from '@angular/material';
 
 @NgModule({
   exports: [
     MatButtonModule,
     MatCheckboxModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
     MatMenuModule,
     MatRadioModule,
     MatSidenavModule,

@@ -8,6 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppMaterialModule } from './app-material.module';
 
 import { UserService } from './services/user.service';
+import { WordService } from './services/word.service';
+
+import { WordDialogComponent } from './components/my/dictionary/word-dialog/word-dialog.component';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -33,10 +36,13 @@ import { NavbarComponent } from './components/my/navbar/navbar.component';
     LoginComponent,
     MyComponent,
     NavbarComponent,
+    WordDialogComponent,
   ],
   providers: [
     UserService,
+    WordService,
   ],
-  bootstrap: [ AppComponent ]
+  entryComponents: [WordDialogComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

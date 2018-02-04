@@ -42,13 +42,13 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private userS: UserService,
     private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
-    this.form = this.fb.group({
+    this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(5)]],
     });

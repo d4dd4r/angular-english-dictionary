@@ -1,0 +1,14 @@
+mat-nav-list mat-list-item * { color: black }
+mat-list-item:nth-child(even) { background-color: rgba(0, 0, 0, .1) }
+mat-nav-list mat-list-item:hover { background: rgba(0, 0, 0, .3) }
+.header span { font-weight: bold }
+.header .row { display: flex }
+.english { width: 15vw }
+.index { width: 5vw; height: 100%; display: flex; align-items: center }
+.fixed-button {
+  position: fixed;
+  right: 26px;
+  bottom: 23px;
+  z-index: 9;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
