@@ -13,6 +13,7 @@ import {
   MatMenuModule,
   MatListModule,
   MatDialogModule,
+  MatTooltipModule,
 } from '@angular/material';
 
 @NgModule({
@@ -29,6 +30,7 @@ import {
     MatRadioModule,
     MatSidenavModule,
     MatSnackBarModule,
+    MatTooltipModule,
   ]
 })
 export class AppMaterialModule {}
