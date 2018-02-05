@@ -7,6 +7,8 @@ import { DictionaryComponent } from './components/my/dictionary/dictionary.compo
 import { ExercisesComponent } from './components/my/exercises/exercises.component';
 import { LearnWordsComponent } from './components/my/exercises/learn-words/learn-words.component';
 
+import { LearnWordsResolver } from './resolvers/learn-words.resolver';
+
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
   { path: 'login', component: LoginComponent },
@@ -19,7 +21,7 @@ const routes: Routes = [
       { path: 'exercises', component: ExercisesComponent },
       { path: 'exercise', redirectTo: 'exercises', pathMatch: 'full' },
       { path: 'exercise', children: [
-        { path: 'learn-words', component: LearnWordsComponent }
+        { path: 'learn-words', resolve: { words: LearnWordsResolver }, component: LearnWordsComponent }
       ] },
     ]
   },

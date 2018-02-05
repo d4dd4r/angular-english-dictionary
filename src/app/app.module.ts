@@ -9,6 +9,7 @@ import { AppMaterialModule } from './app-material.module';
 
 import { UserService } from './services/user.service';
 import { WordService } from './services/word.service';
+import { LearnWordsResolver } from './resolvers/learn-words.resolver';
 
 import { WordDialogComponent } from './components/my/dictionary/word-dialog/word-dialog.component';
 
@@ -41,6 +42,7 @@ import { LearnWordsComponent } from './components/my/exercises/learn-words/learn
     WordDialogComponent,
   ],
   providers: [
+    LearnWordsResolver,
     UserService,
     WordService,
   ],

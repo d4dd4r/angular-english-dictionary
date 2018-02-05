@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { Word } from '../../../../models/word.class';
-import { WordService } from '../../../../services/word.service';
 
 @Component({
   template: `
@@ -36,6 +36,7 @@ import { WordService } from '../../../../services/word.service';
   `]
 })
 export class LearnWordsComponent implements OnInit {
+  private allWords: Word[];
   private shuffledWords: Word[];
   public currentTranslates: Word[];
   public currentWord: Word;
@@ -45,12 +46,13 @@ export class LearnWordsComponent implements OnInit {
   public gameOver = false;
 
   constructor(
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private wordS: WordService,
   ) {}
 
   ngOnInit() {
-    this.shuffledWords = this.shuffle(this.wordS.words, this.totalWordsCount);
+    this.allWords = this.route.snapshot.data['words'];
+    this.shuffledWords = this.shuffle(this.allWords, this.totalWordsCount);
     this.runExercise();
   }
 
@@ -77,7 +79,7 @@ export class LearnWordsComponent implements OnInit {
   }
 
   private getRandomWords(currentWord: Word): Word[] {
-    const words = (<Word[]>this.shuffle(this.wordS.words, 6))
+    const words = (<Word[]>this.shuffle(this.allWords, 6))
       .filter(word => word.id !== currentWord.id);
     
     if (words.length === 6) words.shift();
