@@ -7,4 +7,9 @@ export class SelfService {
   constructor() {
     this.isLoggedIn = false;
   }
+
+  reset() {
+    this.self = null;
+    this.isLoggedIn = false;
+  }
 }

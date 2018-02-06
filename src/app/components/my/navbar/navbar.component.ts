@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { NavbarLinks } from '../../../models/navbar-links.class';
+import { SelfService } from '../../../services/self.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,9 +23,13 @@ import { NavbarLinks } from '../../../models/navbar-links.class';
 export class NavbarComponent {
   @Input('links') public links: NavbarLinks[];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private selfS: SelfService,
+  ) {}
 
   logout() {
+    this.selfS.reset();
     this.router.navigate(['..', 'login']);
   }
 }
