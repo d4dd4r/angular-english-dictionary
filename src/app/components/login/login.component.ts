@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
+import { SelfService } from '../../services/self.service';
 import { UserService } from '../../services/user.service';
 
 import { Login } from '../../models/login.interface';
@@ -44,6 +45,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private userS: UserService,
+    private selfS: SelfService,
     private snackBar: MatSnackBar,
   ) {}
 
@@ -56,6 +58,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit(login: Login) {
     if (this.userS.checkCredentials(login)) {
+      this.selfS.isLoggedIn = true;
+      this.selfS.self = this.userS.users.find(user => (
+        (user.email.toLowerCase() === login.email.toLowerCase()) && (user.password.toLowerCase() === login.password.toLowerCase())
+      ));
       this.router.navigate(['my']);
     } else {
       this.openSnackBar('Email or Password is wrong!', 'Login');
