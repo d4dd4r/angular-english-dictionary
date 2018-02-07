@@ -50,6 +50,8 @@ export class DictionaryComponent {
     this.dialogRef.afterClosed()
       .first()
       .subscribe((result: WordDialog) => {
+        if (!result) return;
+
         const translate = result.additionalTranslate ? [result.translate, result.additionalTranslate] : [result.translate];
         this.wordS.word = new Word(result.english, translate);
         this.words = this.wordS.words;

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { NavbarLinks } from '../../models/navbar-links.class';
 
 @Component({
@@ -26,4 +27,5 @@ export class MyComponent implements OnInit {
       new NavbarLinks('exercises', 'Exercises'),
     ];
   }
+
 }
