@@ -14,7 +14,7 @@ import { Word } from '../../../../models/word.class';
           </mat-grid-tile>
           <mat-grid-tile *ngFor="let translate of currentTranslates">
             <button mat-button (click)="checkAnswer(translate.id)">
-              {{ translate.russian[0] }}
+              {{ getTranslate(translate.russian) }}
             </button>
           </mat-grid-tile>
           <mat-grid-tile colspan="3" rowspan="2">
@@ -24,7 +24,8 @@ import { Word } from '../../../../models/word.class';
         </mat-grid-list>
         <ng-template #gameOverBlock>
           <h2>Game over</h2>
-          <h3 class="half">Success matches: {{ successMatches }}</h3>
+          <h3>Success matches: {{ successMatches }}</h3>
+          <button mat-raised-button color="primary" (click)="restartGame()">Try again</button>
         </ng-template>
       </div>
     </div>
@@ -41,6 +42,7 @@ export class LearnWordsComponent implements OnInit {
   public currentTranslates: Word[];
   public currentWord: Word;
   public totalWordsCount = 20;
+  public translateLimitCount = 6;
   public currentWordCount = 1;
   public successMatches = 0;
   public gameOver = false;
@@ -63,6 +65,21 @@ export class LearnWordsComponent implements OnInit {
     this.checkStatus();
   }
 
+  restartGame() {
+    this.shuffledWords = this.shuffle(this.allWords, this.totalWordsCount);
+    this.currentTranslates = [];
+    this.currentWord = null;
+    this.currentWordCount = 1;
+    this.successMatches = 0;
+    this.runExercise();
+    this.gameOver = false;
+  }
+
+  getTranslate(translates: string[]) {
+    const index = this.getRandomInt(1, translates.length);
+    return translates[index];
+  }
+
   private runExercise() {
     this.currentWord = this.shuffledWords.shift();
     this.currentTranslates = this.getRandomWords(this.currentWord);
@@ -79,10 +96,10 @@ export class LearnWordsComponent implements OnInit {
   }
 
   private getRandomWords(currentWord: Word): Word[] {
-    const words = (<Word[]>this.shuffle(this.allWords, 6))
+    const words = (<Word[]>this.shuffle(this.allWords, this.translateLimitCount))
       .filter(word => word.id !== currentWord.id);
     
-    if (words.length === 6) words.shift();
+    if (words.length === this.translateLimitCount) words.shift();
 
     words.push(currentWord);
     return this.shuffle(words);

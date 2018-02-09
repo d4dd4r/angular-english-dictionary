@@ -21,7 +21,7 @@ import { WordService } from '../../../services/word.service';
           <h3>Read an article</h3>
           <p class="description"><small>You will need to read a random article where used your dictionary words</small></p>
           <button mat-raised-button color="primary" class="disabled"
-            matTooltip="Please, upgrade your account to premium">Go</button>
+            matTooltip="{{ premiumUpgradeText }}">Go</button>
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
@@ -29,7 +29,7 @@ import { WordService } from '../../../services/word.service';
           <h3>Listen to sound phrases</h3>
           <p class="description"><small>You will need to listen to random phrases where used your dictionary words</small></p>
           <button mat-raised-button color="primary" class="disabled"
-            matTooltip="Please, upgrade your account to premium">Go</button>
+            matTooltip="{{ premiumUpgradeText }}">Go</button>
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
@@ -37,7 +37,7 @@ import { WordService } from '../../../services/word.service';
           <h3>Speak with another learners</h3>
           <p class="description"><small>In this exercise you can speak or chatting with another learners</small></p>
           <button mat-raised-button color="primary" class="disabled"
-            matTooltip="Please, upgrade your account to premium">Go</button>
+            matTooltip="{{ premiumUpgradeText }}">Go</button>
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
@@ -45,7 +45,7 @@ import { WordService } from '../../../services/word.service';
           <h3>Speak with native speakers</h3>
           <p class="description"><small>Here you can find a native speaker and to appoint an individual lessons</small></p>
           <button mat-raised-button color="primary" class="disabled"
-            matTooltip="Please, upgrade your account to premium">Go</button>
+            matTooltip="{{ premiumUpgradeText }}">Go</button>
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
@@ -67,6 +67,7 @@ import { WordService } from '../../../services/word.service';
 export class ExercisesComponent {
   private wordCount: number;
   private wordLimit = 20;
+  public premiumUpgradeText = 'Please, upgrade your account to premium';
 
   constructor(
     private router: Router,

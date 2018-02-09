@@ -21,7 +21,7 @@ export class WordService {
       new Word('hammer',    ['молоток', 'молот']),
       new Word('smite',     ['поразить', 'кара']),
       new Word('bare',      ['голый', 'пустой']),
-      // new Word('null',      ['недействительный', 'несуществующий']),
+      new Word('hope',      ['надежда', 'надеяться']),
       new Word('quash',     ['подавлять', 'сокрушить']),
       new Word('give up',   ['сдаваться', 'уступить']),
       new Word('reject',    ['отвергать', 'отклонять']),
