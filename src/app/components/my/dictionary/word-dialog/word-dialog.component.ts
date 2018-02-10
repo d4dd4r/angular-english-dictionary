@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 
+import { Word } from '../../../../models/word.class';
 import { WordDialog } from '../../../../models/word-dialog.interface';
 
 @Component({
@@ -42,14 +43,17 @@ export class WordDialogComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<WordDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public dialogData: { word: Word },
   ) {}
 
   ngOnInit() {
+    const english = this.dialogData.word ? this.dialogData.word.english : '';
+ 
     this.form = this.formBuilder.group({
-      english: ['', [Validators.required]],
-      translates: this.formBuilder.array([
-        this.formBuilder.control('', [Validators.required])
-      ])
+      english: [english, [Validators.required]],
+      translates: this.formBuilder.array(
+        this.fillFormArray()
+      )
     });
   }
 
@@ -61,6 +65,12 @@ export class WordDialogComponent implements OnInit {
 
   onSubmit(values: WordDialog) {
     this.dialogRef.close(values);
+  }
+
+  private fillFormArray(): FormControl[] {
+    if (!this.dialogData.word) return [this.formBuilder.control('', [Validators.required])];
+
+    return this.dialogData.word.russian.map(translate => this.formBuilder.control(translate, [Validators.required]));
   }
 
 }

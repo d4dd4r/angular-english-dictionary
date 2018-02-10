@@ -1,4 +1,5 @@
 import { Word } from '../models/word.class';
+import { WordDialog } from '../models/word-dialog.interface';
 
 export class WordService {
   private _words: Word[] = [];
@@ -44,6 +45,12 @@ export class WordService {
 
   wordById(id: number): Word {
     return this._words.find(word => word.id === id);
+  }
+
+  updateWord(word: WordDialog, id: number) {
+    const index = this._words.findIndex(word => word.id === id);
+    this._words[index].english = word.english;
+    this._words[index].russian = word.translates;
   }
 
 }

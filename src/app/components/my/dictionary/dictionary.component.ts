@@ -22,11 +22,17 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
         <span class="index">{{ i + 1 }}</span>
         <span class="english">{{ word.english }}</span>
         <span class="translate">{{ word.russian.join(', ') }}</span>
+        <span class="actions">
+          <button mat-raised-button mat-mini-fab color="primary"
+              (click)="onEdit(word)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </span>
       </mat-list-item>
     </mat-nav-list>
-    <button mat-raised-button class="fixed-button" color="primary"
+    <button mat-raised-button mat-mini-fab color="primary" class="fixed-button"
         (click)="openWordDialog()">
-      Add new word <mat-icon>games</mat-icon>
+      <mat-icon>add</mat-icon>
     </button>
   `,
   styleUrls: ['./dictionary.component.css']
@@ -34,6 +40,8 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
 export class DictionaryComponent {
   public dialogRef: MatDialogRef<WordDialogComponent>;
   public words: Word[];
+  private editMode = false;
+  private editWordId: number;
 
   constructor(
     private dialog: MatDialog,
@@ -42,9 +50,10 @@ export class DictionaryComponent {
     this.words = this.wordS.words;
   }
 
-  openWordDialog() {
+  openWordDialog(word?: Word) {
     this.dialogRef = this.dialog.open(WordDialogComponent, {
-      width: '25vw'
+      width: '25vw',
+      data: { word }
     });
 
     this.dialogRef.afterClosed()
@@ -52,9 +61,26 @@ export class DictionaryComponent {
       .subscribe((result: WordDialog) => {
         if (!result) return;
 
-        this.wordS.word = new Word(result.english, result.translates);
+        if (this.editMode) {
+          this.wordS.updateWord(result, this.editWordId);
+          this.disableEditMoide();
+        } else {
+          this.wordS.word = new Word(result.english, result.translates);
+        }
+
         this.words = this.wordS.words;
       })
     ;
+  }
+
+  onEdit(word: Word) {
+    this.editMode = true;
+    this.editWordId = word.id;
+    this.openWordDialog(word);
+  }
+
+  private disableEditMoide() {
+    this.editMode = false;
+    this.editWordId = null;
   }
 }
