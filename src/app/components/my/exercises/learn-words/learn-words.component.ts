@@ -12,7 +12,7 @@ import { Word } from '../../../../models/word.class';
           <mat-grid-tile colspan="3">
             <h2>{{ currentWord.english }}</h2>
           </mat-grid-tile>
-          <mat-grid-tile *ngFor="let translate of currentTranslates">
+          <mat-grid-tile *ngFor="let translate of currentTranslates; let i = index">
             <button mat-button (click)="checkAnswer(translate.id)">
               {{ getTranslate(translate.russian) }}
             </button>
@@ -23,7 +23,7 @@ import { Word } from '../../../../models/word.class';
           </mat-grid-tile>
         </mat-grid-list>
         <ng-template #gameOverBlock>
-          <h2>Game over</h2>
+          <h2>{{ getResultText() }}</h2>
           <h3>Success matches: {{ successMatches }}</h3>
           <button mat-raised-button color="primary" (click)="restartGame()">Try again</button>
         </ng-template>
@@ -75,9 +75,17 @@ export class LearnWordsComponent implements OnInit {
     this.gameOver = false;
   }
 
-  getTranslate(translates: string[]) {
-    const index = this.getRandomInt(1, translates.length);
-    return translates[index];
+  getResultText(): string {
+    if (this.successMatches <= 4) return 'Go to learn words!';
+    if (this.successMatches <= 9) return 'Don\'t give up!';
+    if (this.successMatches <= 14) return 'Not bad, but you can better!';
+    if (this.successMatches <= 19) return 'Good!';
+    if (this.successMatches === 20) return 'Well done!';
+  }
+
+  getTranslate(words: string[], index: number) {
+    const i = (index % 2 === 0 && words[1]) ? 1 : 0;
+    return words[i];
   }
 
   private runExercise() {
