@@ -1,7 +1,7 @@
 {
   "name": "angular-template",
   "description": "",
-  "homepage": "https://stackblitz.com/edit/angular-engilsh-dictionary",
+  "homepage": "https://stackblitz.com/edit/angular-english-dictionary",
   "dependencies": {
     "@angular/animations": "5.2.3",
     "@angular/common": "5.0.0",
