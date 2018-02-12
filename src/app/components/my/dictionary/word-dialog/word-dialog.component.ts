@@ -17,6 +17,11 @@ import { WordDialog } from '../../../../models/word-dialog.interface';
         <div formArrayName="translates">
           <mat-form-field class="full-width" *ngFor="let translate of form.get('translates').controls; let i = index">
             <input matInput [formControlName]="i" placeholder="Translate" required>
+            <button mat-button matSuffix mat-icon-button
+                *ngIf="i !== 0"
+                (click)="onDelete($event, i)">
+              <mat-icon>close</mat-icon>
+            </button>
             <mat-error *ngIf="translate.hasError('required')">You must enter a value</mat-error>
           </mat-form-field>
         </div>
@@ -29,7 +34,7 @@ import { WordDialog } from '../../../../models/word-dialog.interface';
       </mat-dialog-content>
       <mat-dialog-actions>
         <button mat-raised-button color="primary"
-            [disabled]="form.invalid">Add</button>
+            [disabled]="form.invalid">Save</button>
         <button mat-raised-button type="button" mat-dialog-close>Cancel</button>
       </mat-dialog-actions>
     </form>
@@ -66,6 +71,11 @@ export class WordDialogComponent implements OnInit {
 
   onSubmit(values: WordDialog) {
     this.dialogRef.close(values);
+  }
+
+  onDelete(event: MouseEvent, index: number) {
+    event.preventDefault();
+    (<FormArray>this.form.get('translates')).removeAt(index);
   }
 
   private fillFormArray(): FormControl[] {
