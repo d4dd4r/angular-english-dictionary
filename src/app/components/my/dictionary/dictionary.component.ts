@@ -6,6 +6,7 @@ import 'rxjs/add/operator/first';
 import { Word } from '../../../models/word.class';
 import { WordDialog } from '../../../models/word-dialog.interface';
 import { WordService } from '../../../services/word.service';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component'
 import { WordDialogComponent } from './word-dialog/word-dialog.component';
 
 @Component({
@@ -27,6 +28,10 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
               (click)="onEdit(word)">
             <mat-icon>edit</mat-icon>
           </button>
+          <button mat-raised-button mat-mini-fab color="primary"
+              (click)="onDelete(word)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </span>
       </mat-list-item>
     </mat-nav-list>
@@ -38,10 +43,11 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
   styleUrls: ['./dictionary.component.css']
 })
 export class DictionaryComponent {
-  public dialogRef: MatDialogRef<WordDialogComponent>;
   public words: Word[];
   private editMode = false;
   private editWordId: number;
+  private wordDialogRef: MatDialogRef<WordDialogComponent>;
+  private confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
 
   constructor(
     private dialog: MatDialog,
@@ -51,12 +57,12 @@ export class DictionaryComponent {
   }
 
   openWordDialog(word?: Word) {
-    this.dialogRef = this.dialog.open(WordDialogComponent, {
+    this.wordDialogRef = this.dialog.open(WordDialogComponent, {
       width: '25vw',
       data: { word }
     });
 
-    this.dialogRef.afterClosed()
+    this.wordDialogRef.afterClosed()
       .first()
       .subscribe((result: WordDialog) => {
         if (!result) return;
@@ -77,6 +83,23 @@ export class DictionaryComponent {
     this.editMode = true;
     this.editWordId = word.id;
     this.openWordDialog(word);
+  }
+
+  onDelete(word: Word) {
+    this.confirmDialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '30vw',
+      data: { question: `You want to remove ${word.english} word. Are you sure?` }
+    });
+
+    this.confirmDialogRef.afterClosed()
+      .first()
+      .subscribe((isConfirm: boolean) => {
+        if (isConfirm) {
+          this.wordS.removeWord(word.id);
+          this.words = this.wordS.words;
+        }
+      })
+    ;
   }
 
   private disableEditMoide() {

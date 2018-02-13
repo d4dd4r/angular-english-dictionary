@@ -53,4 +53,9 @@ export class WordService {
     this._words[index].russian = word.translates;
   }
 
+  removeWord(id: number) {
+    const index = this._words.findIndex(word => word.id === id);
+    this._words.splice(index, 1);
+  }
+
 }
