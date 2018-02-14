@@ -6,7 +6,7 @@ import 'rxjs/add/operator/first';
 import { Word } from '../../../models/word.class';
 import { WordDialog } from '../../../models/word-dialog.interface';
 import { WordService } from '../../../services/word.service';
-import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component'
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 import { WordDialogComponent } from './word-dialog/word-dialog.component';
 
 @Component({
