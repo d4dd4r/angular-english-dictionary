@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import 'rxjs/add/operator/first';
 
@@ -36,7 +37,7 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
       </mat-list-item>
     </mat-nav-list>
     <button mat-raised-button mat-mini-fab color="primary" class="fixed-button"
-        (click)="openWordDialog()">
+        (click)="openWordDialog('Add new word')">
       <mat-icon>add</mat-icon>
     </button>
   `,
@@ -52,14 +53,15 @@ export class DictionaryComponent {
   constructor(
     private dialog: MatDialog,
     private wordS: WordService,
+    private snackBar: MatSnackBar,
   ) {
     this.words = this.wordS.words;
   }
 
-  openWordDialog(word?: Word) {
+  openWordDialog(title: string, word?: Word) {
     this.wordDialogRef = this.dialog.open(WordDialogComponent, {
       width: '25vw',
-      data: { word }
+      data: { word, title }
     });
 
     this.wordDialogRef.afterClosed()
@@ -70,8 +72,10 @@ export class DictionaryComponent {
         if (this.editMode) {
           this.wordS.updateWord(result, this.editWordId);
           this.disableEditMoide();
+          this.openSnackBar('Word is successfully changed');
         } else {
           this.wordS.word = new Word(result.english, result.translates);
+          this.openSnackBar('Word is successfully added');
         }
 
         this.words = this.wordS.words;
@@ -82,7 +86,7 @@ export class DictionaryComponent {
   onEdit(word: Word) {
     this.editMode = true;
     this.editWordId = word.id;
-    this.openWordDialog(word);
+    this.openWordDialog('Edit the word', word);
   }
 
   onDelete(word: Word) {
@@ -97,6 +101,7 @@ export class DictionaryComponent {
         if (isConfirm) {
           this.wordS.removeWord(word.id);
           this.words = this.wordS.words;
+          this.openSnackBar('Word is successfully removed');
         }
       })
     ;
@@ -105,5 +110,12 @@ export class DictionaryComponent {
   private disableEditMoide() {
     this.editMode = false;
     this.editWordId = null;
+  }
+
+  private openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+      panelClass: 'primary'
+    });
   }
 }

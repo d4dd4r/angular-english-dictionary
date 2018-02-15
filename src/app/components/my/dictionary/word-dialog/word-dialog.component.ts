@@ -8,7 +8,7 @@ import { WordDialog } from '../../../../models/word-dialog.interface';
 @Component({
   template: `
     <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
-      <h1 mat-dialog-title>Add new word</h1>
+      <h1 mat-dialog-title>{{ dialogData.title }}</h1>
       <mat-dialog-content>
         <mat-form-field class="full-width">
           <input matInput formControlName="english" placeholder="English word" required>
@@ -49,7 +49,7 @@ export class WordDialogComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<WordDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public dialogData: { word: Word },
+    @Inject(MAT_DIALOG_DATA) public dialogData: { word: Word, title: string },
   ) {}
 
   ngOnInit() {
