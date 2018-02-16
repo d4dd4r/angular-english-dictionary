@@ -18,32 +18,32 @@ import { WordService } from '../../../services/word.service';
       </mat-grid-tile>
       <mat-grid-tile>
         <div class="text-center">
-          <h3>Read an article</h3>
-          <p class="description"><small>You will need to read a random article where used your dictionary words</small></p>
+          <h3>Reading</h3>
+          <p class="description"><small>You will need to read a random article where the words from your dictionary are used</small></p>
           <button mat-raised-button color="primary" class="disabled"
             matTooltip="{{ premiumUpgradeText }}">Go</button>
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
         <div class="text-center">
-          <h3>Listen to sound phrases</h3>
-          <p class="description"><small>You will need to listen to random phrases where used your dictionary words</small></p>
+          <h3>Listening</h3>
+          <p class="description"><small>You will need to listen to random phrases where the words from your dictionary are used</small></p>
           <button mat-raised-button color="primary" class="disabled"
             matTooltip="{{ premiumUpgradeText }}">Go</button>
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
         <div class="text-center">
-          <h3>Speak with another learners</h3>
-          <p class="description"><small>In this exercise you can speak or chatting with another learners</small></p>
+          <h3>Speaking</h3>
+          <p class="description"><small>You can talk to other students in this exercise</small></p>
           <button mat-raised-button color="primary" class="disabled"
             matTooltip="{{ premiumUpgradeText }}">Go</button>
         </div>
       </mat-grid-tile>
       <mat-grid-tile>
         <div class="text-center">
-          <h3>Speak with native speakers</h3>
-          <p class="description"><small>Here you can find a native speaker and to appoint an individual lessons</small></p>
+          <h3>Speaking</h3>
+          <p class="description"><small>Here you can find a native speaker and to appoint an individual lesson</small></p>
           <button mat-raised-button color="primary" class="disabled"
             matTooltip="{{ premiumUpgradeText }}">Go</button>
         </div>
