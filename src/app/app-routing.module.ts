@@ -9,6 +9,7 @@ import { LearnWordsComponent } from './components/my/exercises/learn-words/learn
 
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
+import { ComponentDeactivateGuard } from './guards/component-deactivate.guard';
 import { LearnWordsResolver } from './resolvers/learn-words.resolver';
 
 const routes: Routes = [
@@ -23,9 +24,17 @@ const routes: Routes = [
       { path: 'dictionary', component: DictionaryComponent },
       { path: 'exercises', component: ExercisesComponent },
       { path: 'exercise', redirectTo: 'exercises', pathMatch: 'full' },
-      { path: 'exercise', children: [
-        { path: 'learn-words', resolve: { words: LearnWordsResolver }, component: LearnWordsComponent }
-      ] },
+      {
+        path: 'exercise',
+        children: [
+          {
+            path: 'learn-words',
+            canDeactivate: [ComponentDeactivateGuard],
+            resolve: { words: LearnWordsResolver },
+            component: LearnWordsComponent
+          }
+        ]
+      },
     ]
   },
   { path: '**', redirectTo: '/login' }

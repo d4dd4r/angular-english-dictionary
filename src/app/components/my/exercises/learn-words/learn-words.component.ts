@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
 
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component';
+import { ComponentDeactivateGuard } from '../../../../guards/component-deactivate.guard';
 import { Word } from '../../../../models/word.class';
 
 @Component({
@@ -36,7 +38,7 @@ import { Word } from '../../../../models/word.class';
     .half { display: inline-block; width: 50% }
   `]
 })
-export class LearnWordsComponent implements OnInit {
+export class LearnWordsComponent implements OnInit, ComponentDeactivateGuard {
   private allWords: Word[];
   private shuffledWords: Word[];
   public currentTranslates: Word[];
@@ -46,16 +48,22 @@ export class LearnWordsComponent implements OnInit {
   public currentWordCount = 1;
   public successMatches = 0;
   public gameOver = false;
+  private confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
 
   constructor(
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
     this.allWords = this.route.snapshot.data['words'];
     this.shuffledWords = this.shuffle(this.allWords, this.totalWordsCount);
     this.runExercise();
+  }
+
+  canDeactivate() {
+    return this.confirm();
   }
 
   checkAnswer(id: number) {
@@ -132,6 +140,20 @@ export class LearnWordsComponent implements OnInit {
       duration: 2000,
       panelClass: 'primary'
     });
+  }
+
+  private confirm(): Promise<boolean> {
+    this.confirmDialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '25vw',
+      data: { question: 'Do you want to finish the exercise?' }
+    });
+
+    return new Promise(resolve => {
+      this.confirmDialogRef.afterClosed()
+        .first()
+        .subscribe((isConfirm: boolean) => resolve(isConfirm))
+      ;
+    })
   }
 
 }

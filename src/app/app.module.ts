@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppMaterialModule } from './app-material.module';
 
 import { AuthGuard } from './guards/auth.guard';
+import { ComponentDeactivateGuard } from './guards/component-deactivate.guard';
 import { LoginGuard } from './guards/login.guard';
 import { LearnWordsResolver } from './resolvers/learn-words.resolver';
 import { SelfService } from './services/self.service';
@@ -48,6 +49,7 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog.compo
   ],
   providers: [
     AuthGuard,
+    ComponentDeactivateGuard,
     LoginGuard,
     LearnWordsResolver,
     SelfService,
