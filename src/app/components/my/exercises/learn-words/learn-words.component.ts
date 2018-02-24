@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
+import { _ } from 'lodash';
 
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component';
 import { ComponentDeactivateGuard } from '../../../../guards/component-deactivate.guard';
+import { TranslateWord } from '../../../../models/translate-word.class';
 import { Word } from '../../../../models/word.class';
 
 @Component({
@@ -16,7 +18,7 @@ import { Word } from '../../../../models/word.class';
           </mat-grid-tile>
           <mat-grid-tile *ngFor="let translate of currentTranslates; let i = index">
             <button mat-button (click)="checkAnswer(translate.id)">
-              {{ getTranslate(translate.russian) }}
+              {{ translate.translate }}
             </button>
           </mat-grid-tile>
           <mat-grid-tile colspan="3" rowspan="2">
@@ -35,13 +37,12 @@ import { Word } from '../../../../models/word.class';
   styles: [`
     .body { display: flex; height: calc(100vh - 86px); justify-content: center; align-items: center }
     .wrap { width: 50vw }
-    .half { display: inline-block; width: 50% }
   `]
 })
 export class LearnWordsComponent implements OnInit, ComponentDeactivateGuard {
   private allWords: Word[];
   private shuffledWords: Word[];
-  public currentTranslates: Word[];
+  public currentTranslates: TranslateWord[];
   public currentWord: Word;
   public totalWordsCount = 20;
   public translateLimitCount = 6;
@@ -58,7 +59,7 @@ export class LearnWordsComponent implements OnInit, ComponentDeactivateGuard {
 
   ngOnInit() {
     this.allWords = this.route.snapshot.data['words'];
-    this.shuffledWords = this.shuffle(this.allWords, this.totalWordsCount);
+    this.shuffledWords = this.getShuffledWords();
     this.runExercise();
   }
 
@@ -74,7 +75,7 @@ export class LearnWordsComponent implements OnInit, ComponentDeactivateGuard {
   }
 
   restartGame() {
-    this.shuffledWords = this.shuffle(this.allWords, this.totalWordsCount);
+    this.shuffledWords = this.getShuffledWords();
     this.currentTranslates = [];
     this.currentWord = null;
     this.currentWordCount = 1;
@@ -91,9 +92,12 @@ export class LearnWordsComponent implements OnInit, ComponentDeactivateGuard {
     if (this.successMatches === 20) return 'Well done!';
   }
 
-  getTranslate(words: string[], index: number) {
-    const i = (index % 2 === 0 && words[1]) ? 1 : 0;
-    return words[i];
+  private getShuffledWords(): Word[] {
+    return _.chain(this.allWords)
+            .shuffle()
+            .take(this.totalWordsCount)
+            .value()
+      ;
   }
 
   private runExercise() {
@@ -111,28 +115,23 @@ export class LearnWordsComponent implements OnInit, ComponentDeactivateGuard {
     this.runExercise();
   }
 
-  private getRandomWords(currentWord: Word): Word[] {
-    const words = (<Word[]>this.shuffle(this.allWords, this.translateLimitCount))
-      .filter(word => word.id !== currentWord.id);
-    
-    if (words.length === this.translateLimitCount) words.shift();
+  private getRandomWords(currentWord: Word): TranslateWord[] {
+    let shuffledCards = _.chain(this.allWords)
+                         .shuffle()
+                         .pullAllBy([currentWord], 'id')
+                         .take(this.translateLimitCount - 1)
+                         .value()
+    ;
+    shuffledCards.push(currentWord);
 
-    words.push(currentWord);
-    return this.shuffle(words);
-  }
-
-  private getRandomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min)) + min;
-  }
-
-  private shuffle(arr: any[], count?: number): any[] {
-    const copyOfArr = [...arr];
-
-    for (let i = copyOfArr.length; i > 0; --i) {
-      copyOfArr.push(copyOfArr.splice(Math.random() * i | 0, 1)[0]);
-    }
-
-    return count ? copyOfArr.splice(0, count) : copyOfArr;
+    return shuffledCards = _.chain(shuffledCards)
+                            .shuffle()
+                            .map((word: Word) => new Object({
+                              id: word.id,
+                              translate: _.sample(word.russian)
+                            }))
+                            .value()
+      ;
   }
 
   private openSnackBar(message: string) {
@@ -150,10 +149,10 @@ export class LearnWordsComponent implements OnInit, ComponentDeactivateGuard {
 
     return new Promise(resolve => {
       this.confirmDialogRef.afterClosed()
-        .first()
-        .subscribe((isConfirm: boolean) => resolve(isConfirm))
+          .first()
+          .subscribe((isConfirm: boolean) => resolve(isConfirm))
       ;
-    })
+    });
   }
 
 }

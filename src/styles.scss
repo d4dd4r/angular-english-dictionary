@@ -39,6 +39,7 @@ body {
 .text-right { text-align: right }
 .warning { background-color: #f54336 }
 .primary { background-color: #e91e63 }
+.half { display: inline-block; width: 50% }
 
 input:-webkit-autofill {
   -webkit-text-fill-color: white;
