@@ -64,7 +64,7 @@ export class LearnWordsComponent implements OnInit, ComponentDeactivateGuard {
   }
 
   canDeactivate() {
-    return this.confirm();
+    return (this.currentWordCount === this.totalWordsCount || this.confirm());
   }
 
   checkAnswer(id: number) {

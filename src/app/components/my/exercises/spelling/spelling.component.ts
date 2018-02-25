@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import _ from 'lodash';
@@ -20,7 +20,7 @@ import { Word } from '../../../../models/word.class';
           <mat-grid-tile colspan="3" rowspan="2">
             <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
               <mat-form-field class="full-width">
-                <input matInput formControlName="english" [maxlength]="currentWord.english.length" placeholder="English word">
+                <input matInput #field formControlName="english" [maxlength]="currentWord.english.length" placeholder="English word">
                 <mat-hint align="start">
                   {{ !form.get('english').value ? 0
                      : form.get('english').value.trim().split(' ').length
@@ -53,7 +53,8 @@ import { Word } from '../../../../models/word.class';
     /deep/ .mat-form-field-underline { background-color: #d4799c }
   `]
 })
-export class SpellingComponent implements OnInit, ComponentDeactivateGuard {
+export class SpellingComponent implements OnInit, AfterViewInit, ComponentDeactivateGuard {
+  @ViewChild('field') private field: ElementRef;
   private confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
   private allWords: Word[] = [];
   private shuffledWords: Word[];
@@ -67,6 +68,7 @@ export class SpellingComponent implements OnInit, ComponentDeactivateGuard {
 
   constructor(
     private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef,
     private snackBar: MatSnackBar,
     private wordS: WordService,
     private dialog: MatDialog,
@@ -79,8 +81,13 @@ export class SpellingComponent implements OnInit, ComponentDeactivateGuard {
     this.runExercise();
   }
 
+  ngAfterViewInit() {
+    this.field.nativeElement.focus();
+    this.cdr.detectChanges();
+  }
+
   canDeactivate() {
-    return this.confirm();
+    return (this.currentWordCount === this.totalWordsCount || this.confirm());
   }
 
   restartGame() {
@@ -93,10 +100,9 @@ export class SpellingComponent implements OnInit, ComponentDeactivateGuard {
   }
 
   onSubmit({ english }: { english: string }) {
-    if (english.toLowerCase() === this.currentWord.english.toLowerCase())
-      ++this.successMatches && this.openSnackBar('Success');
-    else
-      this.openSnackBar('Fail');
+    english.toLowerCase() === this.currentWord.english.toLowerCase()
+      ? ++this.successMatches && this.openSnackBar('Success')
+      : this.openSnackBar('Fail');
 
     this.form.get('english').patchValue('');
     this.checkStatus();
@@ -125,6 +131,7 @@ export class SpellingComponent implements OnInit, ComponentDeactivateGuard {
     this.currentWord = this.shuffledWords.shift();
     console.log('this.currentWord', this.currentWord);
     this.currentTranslateWord = this.getTranslateWord();
+    if (this.field) this.field.nativeElement.focus();
   }
 
   private getShuffledWords(): Word[] {
