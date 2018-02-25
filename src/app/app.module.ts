@@ -22,6 +22,7 @@ import { NavbarComponent } from './components/my/navbar/navbar.component';
 import { DictionaryComponent } from './components/my/dictionary/dictionary.component';
 import { ExercisesComponent } from './components/my/exercises/exercises.component';
 import { LearnWordsComponent } from './components/my/exercises/learn-words/learn-words.component';
+import { SpellingComponent } from './components/my/exercises/spelling/spelling.component';
 import { WordDialogComponent } from './components/my/dictionary/word-dialog/word-dialog.component';
 
 import { ConfirmDialogComponent } from './components/shared/confirm-dialog.component';
@@ -45,6 +46,7 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog.compo
     LoginComponent,
     MyComponent,
     NavbarComponent,
+    SpellingComponent,
     WordDialogComponent,
   ],
   providers: [

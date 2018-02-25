@@ -19,11 +19,11 @@ import { Login } from '../../models/login.interface';
           <div class="form-container-body">
             <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
               <mat-form-field class="full-width">
-                <input matInput placeholder="test@mail.com" formControlName="email" required>
+                <input matInput placeholder="test@mail.com" formControlName="email">
                 <mat-error *ngIf="form.controls.email.invalid">{{ getErrorMessage('email') }}</mat-error>
               </mat-form-field>
               <mat-form-field class="full-width">
-                <input matInput type="password" placeholder="12345" formControlName="password" required>
+                <input matInput type="password" placeholder="12345" formControlName="password">
                 <mat-error *ngIf="form.controls.password.invalid">{{ getErrorMessage('password') }}</mat-error>
               </mat-form-field>
               <div class="full-width text-right">

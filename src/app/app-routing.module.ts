@@ -6,6 +6,7 @@ import { MyComponent } from './components/my/my.component';
 import { DictionaryComponent } from './components/my/dictionary/dictionary.component';
 import { ExercisesComponent } from './components/my/exercises/exercises.component';
 import { LearnWordsComponent } from './components/my/exercises/learn-words/learn-words.component';
+import { SpellingComponent } from './components/my/exercises/spelling/spelling.component';
 
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
@@ -31,7 +32,12 @@ const routes: Routes = [
             path: 'learn-words',
             canDeactivate: [ComponentDeactivateGuard],
             resolve: { words: LearnWordsResolver },
-            component: LearnWordsComponent
+            component: LearnWordsComponent,
+          },
+          {
+            path: 'spelling',
+            canDeactivate: [ComponentDeactivateGuard],
+            component: SpellingComponent,
           }
         ]
       },

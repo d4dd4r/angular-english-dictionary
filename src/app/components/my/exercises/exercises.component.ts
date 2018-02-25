@@ -18,6 +18,16 @@ import { WordService } from '../../../services/word.service';
       </mat-grid-tile>
       <mat-grid-tile>
         <div class="text-center">
+          <h3>Spelling</h3>
+          <p class="description"><small>You will need to write words from your dictionary</small></p>
+          <button mat-raised-button color="primary"
+            (click)="onSpelling()"
+            [ngClass]="{ disabled: isWordEnough() }"
+            [matTooltip]="isWordEnough() ? 'Your dictionary contains less 20 words' : null">Go</button>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="text-center">
           <h3>Reading</h3>
           <p class="description"><small>You will need to read a random article where the words from your dictionary are used</small></p>
           <button mat-raised-button color="primary" class="disabled"
@@ -57,7 +67,6 @@ import { WordService } from '../../../services/word.service';
         </div>
       </mat-grid-tile>
     </mat-grid-list>
-    <router-outlet></router-outlet>
   `,
   styles: [`
     button.disabled { background-color: rgba(194, 24, 91, .5) }
@@ -80,6 +89,12 @@ export class ExercisesComponent {
     if (this.isWordEnough()) return;
 
     this.router.navigate(['my', 'exercise', 'learn-words']);
+  }
+
+  onSpelling() {
+    if (this.isWordEnough()) return;
+
+    this.router.navigate(['my', 'exercise', 'spelling']);
   }
 
   isWordEnough(): boolean {
