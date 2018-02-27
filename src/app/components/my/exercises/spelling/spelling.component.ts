@@ -3,6 +3,7 @@ import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import _ from 'lodash';
 
+import { Exercise } from '../exercise.parent';
 import { WordService } from '../../../../services/word.service';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component';
 import { ComponentDeactivateGuard } from '../../../../guards/component-deactivate.guard';
@@ -40,7 +41,7 @@ import { Word } from '../../../../models/word.class';
         <ng-template #gameOverBlock>
           <h2>{{ getResultText() }}</h2>
           <h3>Success matches: {{ successMatches }}</h3>
-          <button mat-raised-button color="primary" (click)="restartGame()">Try again</button>
+          <button mat-raised-button color="primary" (click)="onRestartGame()">Try again</button>
         </ng-template>
       </div>
     </div>
@@ -53,50 +54,34 @@ import { Word } from '../../../../models/word.class';
     /deep/ .mat-form-field-underline { background-color: #d4799c }
   `]
 })
-export class SpellingComponent implements OnInit, AfterViewInit, ComponentDeactivateGuard {
+export class SpellingComponent extends Exercise implements OnInit, AfterViewInit, ComponentDeactivateGuard {
   @ViewChild('field') private field: ElementRef;
-  private confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
-  private allWords: Word[] = [];
-  private shuffledWords: Word[];
-  public currentWord: Word;
   public form: FormGroup;
   public currentTranslateWord: TranslateWord;
-  public successMatches = 0;
-  public totalWordsCount = 20;
-  public currentWordCount = 1;
-  public gameOver = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private snackBar: MatSnackBar,
-    private wordS: WordService,
-    private dialog: MatDialog,
-  ) {}
+    snackBar: MatSnackBar,
+    wordS: WordService,
+    dialog: MatDialog,
+  ) {
+    super(snackBar, wordS, dialog);
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({ english: ['', []] });
-    this.allWords = this.wordS.words;
-    this.shuffledWords = this.getShuffledWords();
     this.runExercise();
   }
-
+  
   ngAfterViewInit() {
     this.field.nativeElement.focus();
     this.cdr.detectChanges();
   }
 
-  canDeactivate() {
-    return (this.currentWordCount === this.totalWordsCount || this.confirm());
-  }
-
-  restartGame() {
-    this.shuffledWords = this.getShuffledWords();
-    this.currentWord = null;
-    this.currentWordCount = 1;
-    this.successMatches = 0;
+  onRestartGame() {
+    this.restartGame();
     this.runExercise();
-    this.gameOver = false;
   }
 
   onSubmit({ english }: { english: string }) {
@@ -106,14 +91,6 @@ export class SpellingComponent implements OnInit, AfterViewInit, ComponentDeacti
 
     this.form.get('english').patchValue('');
     this.checkStatus();
-  }
-
-  getResultText(): string {
-    if (this.successMatches <= 4) return 'Go to learn words!';
-    if (this.successMatches <= 9) return 'Don\'t give up!';
-    if (this.successMatches <= 14) return 'Not bad, but you can better!';
-    if (this.successMatches <= 19) return 'Good!';
-    if (this.successMatches === 20) return 'Well done!';
   }
 
   private checkStatus() {
@@ -126,7 +103,6 @@ export class SpellingComponent implements OnInit, AfterViewInit, ComponentDeacti
     this.runExercise();
   }
 
-
   private runExercise() {
     this.currentWord = this.shuffledWords.shift();
     console.log('this.currentWord', this.currentWord);
@@ -134,40 +110,11 @@ export class SpellingComponent implements OnInit, AfterViewInit, ComponentDeacti
     if (this.field) this.field.nativeElement.focus();
   }
 
-  private getShuffledWords(): Word[] {
-    return _.chain(this.allWords)
-      .shuffle()
-      .take(this.totalWordsCount)
-      .value()
-    ;
-  }
-
   private getTranslateWord(): TranslateWord {
     return new TranslateWord(
       this.currentWord.id,
       _.sample(this.currentWord.russian)
     );
-  }
-
-  private openSnackBar(message: string) {
-    this.snackBar.open(message, null, {
-      duration: 2000,
-      panelClass: 'primary'
-    });
-  }
-
-  private confirm(): Promise<boolean> {
-    this.confirmDialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '25vw',
-      data: { question: 'Do you want to finish the exercise?' }
-    });
-
-    return new Promise(resolve => {      
-      this.confirmDialogRef.afterClosed()
-        .first()
-        .subscribe((isConfirm: boolean) => resolve(isConfirm))
-      ;
-    })
   }
 
 }
