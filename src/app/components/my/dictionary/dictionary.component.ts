@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 
+import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/first';
 
 import { Word } from '../../../models/word.class';
@@ -43,12 +44,13 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
   `,
   styleUrls: ['./dictionary.component.css']
 })
-export class DictionaryComponent {
+export class DictionaryComponent implements OnDestroy {
   public words: Word[];
   private editMode = false;
   private editWordId: number;
   private wordDialogRef: MatDialogRef<WordDialogComponent>;
   private confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
+  private subscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
@@ -56,6 +58,13 @@ export class DictionaryComponent {
     private snackBar: MatSnackBar,
   ) {
     this.words = this.wordS.words;
+    this.subscription = this.wordS.onWordUpdate
+      .subscribe(words => this.words = words)
+    ;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   openWordDialog(title: string, word?: Word) {
@@ -77,8 +86,6 @@ export class DictionaryComponent {
           this.wordS.word = new Word(result.english, result.translates);
           this.openSnackBar('Word is successfully added');
         }
-
-        this.words = this.wordS.words;
       })
     ;
   }
@@ -100,7 +107,6 @@ export class DictionaryComponent {
       .subscribe((isConfirm: boolean) => {
         if (isConfirm) {
           this.wordS.removeWord(word.id);
-          this.words = this.wordS.words;
           this.openSnackBar('Word is successfully removed');
         }
       })

@@ -1,7 +1,10 @@
 import { Word } from '../models/word.class';
 import { WordDialog } from '../models/word-dialog.interface';
 
+import { Subject } from 'rxjs/Subject';
+
 export class WordService {
+  public onWordUpdate = new Subject<Word[]>();
   private _words: Word[] = [];
   private lastId = 0;
 
@@ -37,6 +40,7 @@ export class WordService {
   public set word(word: Word) {
     word.id = ++this.lastId;
     this._words.push(word);
+    this.onWordUpdate.next(this.words);
   }
 
   public set words(words: Word[]) {
@@ -51,11 +55,13 @@ export class WordService {
     const index = this._words.findIndex(word => word.id === id);
     this._words[index].english = word.english;
     this._words[index].russian = word.translates;
+    this.onWordUpdate.next(this.words);
   }
 
   removeWord(id: number) {
     const index = this._words.findIndex(word => word.id === id);
     this._words.splice(index, 1);
+    this.onWordUpdate.next(this.words);
   }
 
 }
