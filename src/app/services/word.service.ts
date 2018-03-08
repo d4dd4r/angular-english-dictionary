@@ -1,4 +1,4 @@
-import { Word } from '../models/word.class';
+import { Word, WORD_TYPES } from '../models/word.class';
 import { WordDialog } from '../models/word-dialog.interface';
 
 import { Subject } from 'rxjs/Subject';
@@ -34,13 +34,21 @@ export class WordService {
   }
 
   public get words(): Word[] {
-    return this._words;
+    return this._words.filter(word => word.type === WORD_TYPES.NEW);
   }
 
   public set word(word: Word) {
     word.id = ++this.lastId;
     this._words.push(word);
     this.onWordUpdate.next(this.words);
+  }
+
+  public get knownWords(): Word[] {
+    return this._words.filter(word => word.type === WORD_TYPES.KNOWN);
+  }
+
+  public allWords(): Word[] {
+    return this._words.filter(word => word.type !== WORD_TYPES.REMOVED);
   }
 
   public set words(words: Word[]) {
@@ -55,12 +63,13 @@ export class WordService {
     const index = this._words.findIndex(word => word.id === id);
     this._words[index].english = word.english;
     this._words[index].russian = word.translates;
-    this.onWordUpdate.next(this.words);
+    this._words[index].type = word.known ? WORD_TYPES.KNOWN : WORD_TYPES.NEW;
+    this.onWordUpdate.next(this._words);
   }
 
   removeWord(id: number) {
     const index = this._words.findIndex(word => word.id === id);
-    this._words.splice(index, 1);
+    this._words[index].type = WORD_TYPES.REMOVED;
     this.onWordUpdate.next(this.words);
   }
 

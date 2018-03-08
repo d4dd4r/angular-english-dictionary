@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 
-import { Word } from '../../../../models/word.class';
+import { Word, WORD_TYPES } from '../../../../models/word.class';
 import { WordDialog } from '../../../../models/word-dialog.interface';
 
 @Component({
@@ -25,7 +25,8 @@ import { WordDialog } from '../../../../models/word-dialog.interface';
             <mat-error *ngIf="translate.hasError('required')">You must enter a value</mat-error>
           </mat-form-field>
         </div>
-        <div class="add-btn-wrapper">
+        <div class="actions-wrapper">
+          <mat-checkbox formControlName="known">Already known</mat-checkbox>
           <button mat-raised-button mat-mini-fab color="primary" type="button"
               (click)="onAddTranslate()">
             <mat-icon>playlist_add</mat-icon>
@@ -40,6 +41,7 @@ import { WordDialog } from '../../../../models/word-dialog.interface';
     </form>
   `,
   styles: [`
+    .actions-wrapper { display: flex; justify-content: space-between }
     .add-btn-wrapper { display: flex; justify-content: flex-end }
   `]
 })
@@ -54,12 +56,14 @@ export class WordDialogComponent implements OnInit {
 
   ngOnInit() {
     const english = this.dialogData.word ? this.dialogData.word.english : '';
+    const known = this.dialogData.word ? this.dialogData.word.type === WORD_TYPES.KNOWN : false;
 
     this.form = this.formBuilder.group({
       english: [english, [Validators.required]],
       translates: this.formBuilder.array(
         this.fillFormArray()
-      )
+      ),
+      known: [known, []]
     });
   }
 

@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/first';
 
-import { Word } from '../../../models/word.class';
+import { Word, WORD_TYPES } from '../../../models/word.class';
 import { WordDialog } from '../../../models/word-dialog.interface';
 import { WordService } from '../../../services/word.service';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
@@ -78,12 +78,14 @@ export class DictionaryComponent implements OnDestroy {
       .subscribe((result: WordDialog) => {
         if (!result) return;
 
+        const wordType = result.known ? WORD_TYPES.KNOWN : WORD_TYPES.NEW;
+
         if (this.editMode) {
           this.wordS.updateWord(result, this.editWordId);
           this.disableEditMoide();
           this.openSnackBar('Word is successfully changed');
         } else {
-          this.wordS.word = new Word(result.english, result.translates);
+          this.wordS.word = new Word(result.english, result.translates, wordType);
           this.openSnackBar('Word is successfully added');
         }
       })
