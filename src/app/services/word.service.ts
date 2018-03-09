@@ -11,17 +11,17 @@ export class WordService {
   constructor() {
     this.words = [
       new Word('padding',   ['набивка', 'набивочный материал']),
-      new Word('throw',     ['выкидывать', 'выбрасывать']),
-      new Word('quash',     ['подавлять', 'сокрушить']),
+      new Word('throw',     ['выкидывать', 'выбрасывать'], WORD_TYPES.KNOWN),
+      new Word('quash',     ['подавлять', 'сокрушить'], WORD_TYPES.KNOWN),
       new Word('grind',     ['молоть', 'перемалывать']),
       new Word('reject',    ['отвергать', 'отклонять']),
-      new Word('stuffing',  ['начинка', 'наполнение']),
+      new Word('stuffing',  ['начинка', 'наполнение'], WORD_TYPES.KNOWN),
       new Word('give up',   ['сдаваться', 'уступить']),
       new Word('hope',      ['надежда', 'надеяться']),
       new Word('oblique',   ['косой', 'наклонный']),
-      new Word('place',     ['место', 'местечко']),
-      new Word('beat',      ['бить', 'колотить']),
-      new Word('hammer',    ['молоток', 'молот']),
+      new Word('place',     ['место', 'местечко'], WORD_TYPES.KNOWN),
+      new Word('beat',      ['бить', 'колотить'], WORD_TYPES.KNOWN),
+      new Word('hammer',    ['молоток', 'молот'], WORD_TYPES.KNOWN),
       new Word('smite',     ['поразить', 'кара']),
       new Word('slash',     ['разрез', 'порез']),
       new Word('bare',      ['голый', 'пустой']),
@@ -47,7 +47,7 @@ export class WordService {
     return this._words.filter(word => word.type === WORD_TYPES.KNOWN);
   }
 
-  public allWords(): Word[] {
+  public get allWords(): Word[] {
     return this._words.filter(word => word.type !== WORD_TYPES.REMOVED);
   }
 
@@ -64,7 +64,7 @@ export class WordService {
     this._words[index].english = word.english;
     this._words[index].russian = word.translates;
     this._words[index].type = word.known ? WORD_TYPES.KNOWN : WORD_TYPES.NEW;
-    this.onWordUpdate.next(this._words);
+    this.onWordUpdate.next(this.words);
   }
 
   removeWord(id: number) {

@@ -12,7 +12,7 @@ export class LearnWordsResolver implements Resolve<Word[]> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Word[] {
-    const words = this.wordS.words;
+    const words = this.wordS.allWords;
     if (words.length < 20) this.router.navigate(['my', 'exercises']);
     else return words;
   }

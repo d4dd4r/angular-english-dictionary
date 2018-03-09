@@ -11,7 +11,7 @@ import { NavbarLinks } from '../../models/navbar-links.class';
   `,
   styles: [`
     .body {
-      min-height: calc(100vh - 86px);
+      min-height: calc(100vh - 100px);
       margin: 68px 21px 18px 21px;
       border-radius: 3px;
       background-color: rgba(255, 255, 255, .9);

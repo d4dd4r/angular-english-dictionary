@@ -1,18 +1,37 @@
 mat-nav-list mat-list-item * { color: black }
 mat-list-item:nth-child(even) { background-color: rgba(0, 0, 0, .1) }
-mat-nav-list mat-list-item:hover { background: rgba(0, 0, 0, .3) }
-.header span { font-weight: bold }
-.header .row { display: flex }
-.english { width: 15vw }
-.index { width: 5vw; height: 100%; display: flex; align-items: center }
-.fixed-button {
+mat-nav-list mat-list-item:hover:not(.header):not(.known) { background: rgba(0, 0, 0, .2) }
+mat-nav-list mat-list-item:hover.known { background: rgba(135, 190, 80, .8) !important }
+.header {
   position: fixed;
-  right: 9%;
-  bottom: 22px;
-  z-index: 9;
+  background: #e9e9e9;
+  left: 21px;
+  right: 21px;
+  z-index: 100;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
   box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
 }
-span.actions {
-  position: absolute;
-  right: 1%;
+.header span { font-weight: bold }
+.header .row, .row { display: flex }
+.row span {
+  display: flex;
+  align-items: center;
 }
+.index { width: 5vw }
+.english { width: 15vw }
+.actions {
+  position: absolute;
+  right: 21px;
+  top: 4px;
+}
+.actions .mat-checkbox { margin-right: 2vw }
+.wrapper { margin-top: 48px }
+/deep/ .mat-nav-list:last-child {
+  max-height: calc(100vh - 148px);
+  overflow: scroll;
+  padding-top: 0 !important;
+}
+mat-list-item.known { background-color: rgba(170, 220, 120, .4) }
+mat-list-item.known + mat-list-item.known:nth-child(even) { background-color: rgba(135, 190, 80, .5) }
+mat-list-item:not(.known):nth-child(odd) + mat-list-item.known:nth-child(even) { background-color: rgba(135, 190, 80, .5) }

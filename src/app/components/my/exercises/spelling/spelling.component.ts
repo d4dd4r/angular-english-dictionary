@@ -73,7 +73,7 @@ export class SpellingComponent extends Exercise implements OnInit, AfterViewInit
     this.form = this.formBuilder.group({ english: ['', []] });
     this.runExercise();
   }
-  
+
   ngAfterViewInit() {
     this.field.nativeElement.focus();
     this.cdr.detectChanges();

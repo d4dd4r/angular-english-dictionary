@@ -19,7 +19,7 @@ export class Exercise {
     private wordS: WordService,
     private dialog: MatDialog,
   ) {
-    this.allWords = wordS.words;
+    this.allWords = wordS.allWords;
     this.shuffledWords = this.getShuffledWords();
   }
 
@@ -93,7 +93,7 @@ export class Exercise {
       data: { question: 'Do you want to finish the exercise?' }
     });
 
-    return new Promise(resolve => {      
+    return new Promise(resolve => {
       this.confirmDialogRef.afterClosed()
         .first()
         .subscribe((isConfirm: boolean) => resolve(isConfirm))

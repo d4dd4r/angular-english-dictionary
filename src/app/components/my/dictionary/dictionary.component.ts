@@ -13,39 +13,55 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
 
 @Component({
   template: `
-    <mat-nav-list>
-      <mat-list-item class="header">
-        <div matLine class="row">
-          <span class="index">#</span>
-          <span class="english">Word</span>
-          <span class="translate">Translate</span>
-        </div>
-      </mat-list-item>
-      <mat-list-item *ngFor="let word of words; let i = index">
-        <span class="index">{{ i + 1 }}</span>
-        <span class="english">{{ word.english }}</span>
-        <span class="translate">{{ word.russian.join(', ') }}</span>
-        <span class="actions">
-          <button mat-raised-button mat-mini-fab color="primary"
-              (click)="onEdit(word)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-raised-button mat-mini-fab color="primary"
-              (click)="onDelete(word)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </span>
-      </mat-list-item>
-    </mat-nav-list>
-    <button mat-raised-button mat-mini-fab color="primary" class="fixed-button"
-        (click)="openWordDialog('Add new word')">
-      <mat-icon>add</mat-icon>
-    </button>
+    <div>
+      <mat-nav-list>
+        <mat-list-item class="header">
+          <div matLine class="row">
+            <span class="index">#</span>
+            <span class="english">Word</span>
+            <span class="translate">Translate</span>
+            <span class="actions">
+              <mat-checkbox align="end" (click)="onTypeChange()">Show known words too</mat-checkbox>
+              <button mat-raised-button matSuffix color="primary"
+                  (click)="openWordDialog('Add new word')">Add new</button>
+            </span>
+          </div>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
+    <div class="wrapper">
+      <mat-nav-list>
+        <mat-list-item *ngFor="let word of words; let i = index" [ngClass]="{ known: word.type === knownType }">
+          <div class="row">
+            <span class="index">{{ i + 1 }}</span>
+            <span class="english">{{ word.english }}</span>
+            <span class="translate">{{ word.russian.join(', ') }}</span>
+            <span class="actions">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="onEdit(word)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="onDelete(word)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Remove</span>
+                </button>
+              </mat-menu>
+            </span>
+          </div>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
   `,
   styleUrls: ['./dictionary.component.css']
 })
 export class DictionaryComponent implements OnDestroy {
   public words: Word[];
+  public checkboxLever = false;
+  public knownType = WORD_TYPES.KNOWN;
   private editMode = false;
   private editWordId: number;
   private wordDialogRef: MatDialogRef<WordDialogComponent>;
@@ -59,7 +75,7 @@ export class DictionaryComponent implements OnDestroy {
   ) {
     this.words = this.wordS.words;
     this.subscription = this.wordS.onWordUpdate
-      .subscribe(words => this.words = words)
+      .subscribe(words => this.checkboxLever ? this.words = this.wordS.allWords : this.words = words)
     ;
   }
 
@@ -113,6 +129,11 @@ export class DictionaryComponent implements OnDestroy {
         }
       })
     ;
+  }
+
+  onTypeChange() {
+    this.words = this.checkboxLever ? this.wordS.words : this.wordS.allWords;
+    this.checkboxLever = !this.checkboxLever;
   }
 
   private disableEditMoide() {
