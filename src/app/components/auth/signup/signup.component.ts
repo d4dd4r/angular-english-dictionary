@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
+import { AuthService } from '../../../services/auth.service';
 import { SelfService } from '../../../services/self.service';
-import { UserService } from '../../../services/user.service';
 
 import { Auth } from '../../../models/auth.interface';
 
@@ -14,22 +14,22 @@ import { Auth } from '../../../models/auth.interface';
       <mat-sidenav-content class="container">
         <div class="form-container">
           <div class="form-container-title">
-            <h2 class="no-margin">Sign In</h2>
+            <h2 class="no-margin">Sign Up</h2>
           </div>
           <div class="form-container-body">
             <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
               <mat-form-field class="full-width">
-                <input matInput placeholder="test@mail.com" formControlName="email">
+                <input matInput placeholder="your@email.com" formControlName="email">
                 <mat-error *ngIf="form.controls.email.invalid">{{ getErrorMessage('email') }}</mat-error>
               </mat-form-field>
               <mat-form-field class="full-width">
-                <input matInput type="password" placeholder="12345" formControlName="password">
+                <input matInput type="password" placeholder="123456" formControlName="password">
                 <mat-error *ngIf="form.controls.password.invalid">{{ getErrorMessage('password') }}</mat-error>
               </mat-form-field>
               <div class="full-width actions">
-                <button type="button" mat-button routerLink="../signup">Sign Up</button>
+                <button type="button" mat-button routerLink="../signin">Sign In</button>
                 <button mat-raised-button color="primary"
-                    [disabled]="!form.valid">Sign In</button>
+                    [disabled]="!form.valid">Sign Up</button>
               </div>
             </form>
           </div>
@@ -37,36 +37,31 @@ import { Auth } from '../../../models/auth.interface';
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
-  styleUrls: ['./signin.component.css']
+  styleUrls: ['./signup.component.css']
 })
-export class SigninComponent implements OnInit {
+export class SignupComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private userS: UserService,
-    private selfS: SelfService,
     private snackBar: MatSnackBar,
+    private authS: AuthService,
+    private selfS: SelfService,
   ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       email: [null, [Validators.required, Validators.email]],
-      password: [null, [Validators.required, Validators.minLength(5)]],
+      password: [null, [Validators.required, Validators.minLength(6)]],
     });
   }
 
   onSubmit(auth: Auth) {
-    if (this.userS.checkCredentials(auth)) {
-      this.selfS.isLoggedIn = true;
-      this.selfS.self = this.userS.users.find(user => (
-        (user.email.toLowerCase() === auth.email.toLowerCase()) && (user.password.toLowerCase() === auth.password.toLowerCase())
-      ));
-      this.router.navigate(['my']);
-    } else {
-      this.openSnackBar('Email or Password is wrong!', 'Sign In');
-    }
+    this.authS.signupUser(auth)
+      .then(() => console.log('user is successfully created'))
+      .catch(err => console.log('user creating is failed', err))
+    ;
   }
 
   getErrorMessage(type: string): string | void {

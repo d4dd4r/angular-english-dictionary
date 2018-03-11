@@ -2,6 +2,7 @@ import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { SigninComponent } from './components/auth/signin/signin.component';
+import { SignupComponent } from './components/auth/signup/signup.component';
 import { MyComponent } from './components/my/my.component';
 import { DictionaryComponent } from './components/my/dictionary/dictionary.component';
 import { ExercisesComponent } from './components/my/exercises/exercises.component';
@@ -14,8 +15,9 @@ import { ComponentDeactivateGuard } from './guards/component-deactivate.guard';
 import { LearnWordsResolver } from './resolvers/learn-words.resolver';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/login' },
-  { path: 'login', canActivate: [LoginGuard], component: SigninComponent },
+  { path: '', pathMatch: 'full', redirectTo: '/signin' },
+  { path: 'signin', canActivate: [LoginGuard], component: SigninComponent },
+  { path: 'signup', canActivate: [LoginGuard], component: SignupComponent },
   { path: 'my', redirectTo: '/my/dictionary', pathMatch: 'full' },
   {
     path: 'my',
@@ -43,7 +45,7 @@ const routes: Routes = [
       },
     ]
   },
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/signin' },
 ];
 
 @NgModule({

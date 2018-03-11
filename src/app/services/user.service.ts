@@ -1,5 +1,5 @@
 import { User } from '../models/user.class';
-import { Login } from '../models/login.interface';
+import { Auth } from '../models/auth.interface';
 
 export class UserService {
   private _users: User[] = [];
@@ -29,9 +29,9 @@ export class UserService {
     return this._users.find(user => user.id === id);
   }
 
-  checkCredentials(data: Login): boolean {
-    const user = this._users.find(user => user.email.toLowerCase() === data.email.toLowerCase());
-    return (user && user.password === data.password);
+  checkCredentials(auth: Auth): boolean {
+    const user = this._users.find(user => user.email.toLowerCase() === auth.email.toLowerCase());
+    return (user && user.password === auth.password);
   }
 
 }
