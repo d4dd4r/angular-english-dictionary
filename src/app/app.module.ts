@@ -11,12 +11,14 @@ import { AuthGuard } from './guards/auth.guard';
 import { ComponentDeactivateGuard } from './guards/component-deactivate.guard';
 import { LoginGuard } from './guards/login.guard';
 import { LearnWordsResolver } from './resolvers/learn-words.resolver';
+import { AuthService } from './services/auth.service';
 import { SelfService } from './services/self.service';
 import { UserService } from './services/user.service';
 import { WordService } from './services/word.service';
 
 import { AppComponent } from './app.component';
 import { SigninComponent } from './components/auth/signin/signin.component';
+//import { SignupComponent } from './components/auth/signup/signup.component';
 import { MyComponent } from './components/my/my.component';
 import { NavbarComponent } from './components/my/navbar/navbar.component';
 import { DictionaryComponent } from './components/my/dictionary/dictionary.component';
@@ -46,6 +48,7 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog.compo
     MyComponent,
     NavbarComponent,
     SigninComponent,
+    //SignupComponent,
     SpellingComponent,
     WordDialogComponent,
   ],
@@ -54,6 +57,7 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog.compo
     ComponentDeactivateGuard,
     LoginGuard,
     LearnWordsResolver,
+    AuthService,
     SelfService,
     UserService,
     WordService,
