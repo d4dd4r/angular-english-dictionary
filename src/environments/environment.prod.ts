@@ -1,3 +1,8 @@
 export const environment = {
-  production: true
+  production: true,
+  firebase: {
+    apiKey: "AIzaSyDsetJdmwA5r82knTwuIqXO_rIailrw7No",
+    authDomain: "angular-english-dictionary.firebaseapp.com",
+    databaseURL: "https://angular-english-dictionary.firebaseio.com",
+  },
 };

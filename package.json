@@ -21,7 +21,8 @@
     "@types/lodash": "4.14.104",
     "@angular/material": "5.1.1",
     "web-animations-js": "2.3.1",
-    "@angular-devkit/core": "0.2.0"
+    "@angular-devkit/core": "0.2.0",
+    "firebase": "4.11.0"
   },
   "version": "0.0.0",
   "license": "MIT",
