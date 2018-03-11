@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
-import { SelfService } from '../../services/self.service';
-import { UserService } from '../../services/user.service';
+import { SelfService } from '../../../services/self.service';
+import { UserService } from '../../../services/user.service';
 
-import { Login } from '../../models/login.interface';
+import { Login } from '../../../models/login.interface';
 
 @Component({
   template: `
@@ -26,9 +26,10 @@ import { Login } from '../../models/login.interface';
                 <input matInput type="password" placeholder="12345" formControlName="password">
                 <mat-error *ngIf="form.controls.password.invalid">{{ getErrorMessage('password') }}</mat-error>
               </mat-form-field>
-              <div class="full-width text-right">
+              <div class="full-width actions">
+                <button type="button" mat-button routerLink="../signup">Sign Up</button>
                 <button mat-raised-button color="primary"
-                    [disabled]="!form.valid">Login</button>
+                    [disabled]="!form.valid">Sign In</button>
               </div>
             </form>
           </div>
@@ -36,9 +37,9 @@ import { Login } from '../../models/login.interface';
       </mat-sidenav-content>
     </mat-sidenav-container>
   `,
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./signin.component.css']
 })
-export class LoginComponent implements OnInit {
+export class SigninComponent implements OnInit {
   public form: FormGroup;
 
   constructor(

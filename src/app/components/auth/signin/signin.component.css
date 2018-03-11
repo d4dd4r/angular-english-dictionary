@@ -21,3 +21,7 @@
 .form-container-body {
   padding: 30px;
 }
+.actions {
+  display: flex;
+  justify-content: space-between;
+}

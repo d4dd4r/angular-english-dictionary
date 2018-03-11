@@ -16,7 +16,7 @@ import { UserService } from './services/user.service';
 import { WordService } from './services/word.service';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
+import { SigninComponent } from './components/auth/signin/signin.component';
 import { MyComponent } from './components/my/my.component';
 import { NavbarComponent } from './components/my/navbar/navbar.component';
 import { DictionaryComponent } from './components/my/dictionary/dictionary.component';
@@ -43,9 +43,9 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog.compo
     DictionaryComponent,
     ExercisesComponent,
     LearnWordsComponent,
-    LoginComponent,
     MyComponent,
     NavbarComponent,
+    SigninComponent,
     SpellingComponent,
     WordDialogComponent,
   ],
@@ -64,4 +64,4 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog.compo
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
