@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 
 import { NavbarLinks } from '../../../models/navbar-links.class';
-import { SelfService } from '../../../services/self.service';
+import { AuthService } from '../../../services/auth.service';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 
 @Component({
@@ -29,7 +29,7 @@ export class NavbarComponent {
   constructor(
     private router: Router,
     private dialog: MatDialog,
-    private selfS: SelfService,
+    private authS: AuthService,
   ) {}
 
   logout() {
@@ -42,8 +42,8 @@ export class NavbarComponent {
       .first()
       .subscribe((isConfirm: boolean) => {
         if (isConfirm) {
-          this.selfS.reset();
-          this.router.navigate(['..', 'login']);
+          this.authS.signOut();
+          this.router.navigate(['/signin']);
         }
       })
     ;

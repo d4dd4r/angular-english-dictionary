@@ -12,8 +12,6 @@ import { ComponentDeactivateGuard } from './guards/component-deactivate.guard';
 import { LoginGuard } from './guards/login.guard';
 import { LearnWordsResolver } from './resolvers/learn-words.resolver';
 import { AuthService } from './services/auth.service';
-import { SelfService } from './services/self.service';
-import { UserService } from './services/user.service';
 import { WordService } from './services/word.service';
 
 import { AppComponent } from './app.component';
@@ -58,8 +56,6 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog.compo
     LoginGuard,
     LearnWordsResolver,
     AuthService,
-    SelfService,
-    UserService,
     WordService,
   ],
   entryComponents: [

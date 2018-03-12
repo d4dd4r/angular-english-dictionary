@@ -31,6 +31,7 @@ export class AuthService extends FirebaseService {
   }
 
   signOut(): Promise<void> {
+    this.isLoggedIn = false;
     return auth().signOut();
   }
 

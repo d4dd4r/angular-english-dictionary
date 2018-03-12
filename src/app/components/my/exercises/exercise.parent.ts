@@ -115,7 +115,7 @@ export class Exercise {
     if (this.successMatches <= (this.totalWordsCount - Math.floor(this.totalWordsCount / 3))) return 'Not bad, but you can better!';
     if (this.successMatches <= (this.totalWordsCount - Math.floor(this.totalWordsCount / 5))) return 'Good!';
     if (this.successMatches <= (this.totalWordsCount - Math.floor(this.totalWordsCount / 10))) return 'Nice!';
-    if (this.successMatches === this.totalWordsCount) return 'Well done!';
+    if ((this.successMatches > (this.totalWordsCount - Math.floor(this.totalWordsCount / 10))) && (this.successMatches <= this.totalWordsCount)) return 'Well done!';
   }
 
   protected openSnackBar(message: string) {
