@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../../../services/auth.service';
-import { SelfService } from '../../../services/self.service';
 
 import { Auth } from '../../../models/auth.interface';
 
@@ -47,7 +46,6 @@ export class SignupComponent implements OnInit {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private authS: AuthService,
-    private selfS: SelfService,
   ) {}
 
   ngOnInit() {
@@ -59,8 +57,10 @@ export class SignupComponent implements OnInit {
 
   onSubmit(auth: Auth) {
     this.authS.signupUser(auth)
-      .then(() => console.log('user is successfully created'))
-      .catch(err => console.log('user creating is failed', err))
+      .then(() => {
+        this.openSnackBar('user is successfully created. please, approve your email', '', ['info', 'font-white']);
+        this.router.navigate(['/signin']);
+      })
     ;
   }
 
@@ -74,10 +74,10 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  private openSnackBar(message: string, action: string) {
+  private openSnackBar(message: string, action: string = '', panelClass: string | string[] = '') {
     this.snackBar.open(message, action, {
-      duration: 4000,
-      panelClass: 'warning'
+      duration: 8000,
+      panelClass,
     });
   }
 }

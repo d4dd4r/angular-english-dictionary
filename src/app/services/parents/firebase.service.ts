@@ -5,18 +5,21 @@ import { FirebaseError, FirebaseParsedError } from '../../models/firebase.interf
 export class FirebaseService {
   constructor(private snackBar: MatSnackBar) {}
 
-  protected firebaseErrorHandler(error: FirebaseError) {
+  protected firebaseErrorHandler(error: FirebaseError, showSnackBar: boolean = true) {
     const paresedError = this.parseError(error);
-    this.snackBar.open(
-      paresedError.message,
-      paresedError.action,
-      {
-        duration: 5000,
-        panelClass: 'warning'
-      }
-    );
 
-    Promise.reject(error);
+    if (showSnackBar) {
+      this.snackBar.open(
+        paresedError.message,
+        paresedError.action,
+        {
+          duration: 5000,
+          panelClass: 'warning'
+        }
+      );
+    }
+
+    return Promise.reject(error);
   }
 
   private parseError(error: FirebaseError): FirebaseParsedError {
