@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { SelfService } from '../services/self.service';
+
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class LoginGuard implements CanActivate {
   constructor(
-    private selfS: SelfService,
+    private authS: AuthService,
     private router: Router,
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.selfS.isLoggedIn) {
+    if (this.authS.isLoggedIn) {
       this.router.navigate(['my', 'dictionary']);
       return false;
     }
 
     return true;
-    
   }
 }

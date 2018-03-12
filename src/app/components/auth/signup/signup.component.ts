@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { AuthService } from '../../../services/auth.service';
 
-import { Auth } from '../../../models/auth.interface';
+import { AuthData } from '../../../models/auth-data.interface';
 
 @Component({
   template: `
@@ -55,11 +55,11 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  onSubmit(auth: Auth) {
-    this.authS.signupUser(auth)
+  onSubmit(authData: AuthData) {
+    this.authS.signUpUser(authData)
       .then(() => {
-        this.openSnackBar('user is successfully created. please, approve your email', '', ['info', 'font-white']);
-        this.router.navigate(['/signin']);
+        this.openSnackBar('User is successfully created. Please, approve your email', '', ['info', 'font-white']);
+        this.router.navigate(['signin']);
       })
     ;
   }
@@ -70,7 +70,7 @@ export class SignupComponent implements OnInit {
       if (this.form.get('email').hasError('email')) return 'Not a valid email';
     } else if (type === 'password') {
       if (this.form.get('password').hasError('required')) return 'You must enter a value';
-      if (this.form.get('password').hasError('minlength')) return 'Minimum 5 characters';
+      if (this.form.get('password').hasError('minlength')) return 'Minimum 6 characters';
     }
   }
 
