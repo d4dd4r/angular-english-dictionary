@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { User } from '@firebase/auth-types';
 
 import { FirebaseService } from './parents/firebase.service';
-import { environment } from '../../environments/environment.prod';
-import { auth, User } from 'firebase';
 
 import { AuthData } from '../models/auth-data.interface';
 
@@ -11,19 +11,22 @@ import { AuthData } from '../models/auth-data.interface';
 export class AuthService extends FirebaseService {
   public isLoggedIn: boolean = false;
 
-  constructor(snackBar: MatSnackBar) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    snackBar: MatSnackBar,
+  ) {
     super(snackBar);
   }
 
   signInUser(authData: AuthData): Promise<User> {
-    return auth().signInWithEmailAndPassword(authData.email, authData.password)
+    return this.afAuth.auth.signInWithEmailAndPassword(authData.email, authData.password)
       .then((user: User) => user)
       .catch(this.firebaseErrorHandler.bind(this))
     ;
   }
 
   signUpUser(authData: AuthData): Promise<void> {
-    return auth().createUserWithEmailAndPassword(authData.email, authData.password)
+    return this.afAuth.auth.createUserWithEmailAndPassword(authData.email, authData.password)
       .then((user: User) => this.sendEmailConfirmation(user))
       .then(() => this.signOut())
       .catch(this.firebaseErrorHandler.bind(this))
@@ -32,7 +35,7 @@ export class AuthService extends FirebaseService {
 
   signOut(): Promise<void> {
     this.isLoggedIn = false;
-    return auth().signOut();
+    return this.afAuth.auth.signOut();
   }
 
   sendEmailConfirmation(user: User = this.getCurrentUser()): Promise<void> {
@@ -42,6 +45,6 @@ export class AuthService extends FirebaseService {
   }
 
   getCurrentUser(): User {
-    return auth().currentUser;
+    return this.afAuth.auth.currentUser;
   }
 }
