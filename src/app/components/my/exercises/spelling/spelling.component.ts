@@ -1,14 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
-import _ from 'lodash';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import * as _ from 'lodash';
 
 import { Exercise } from '../exercise.parent';
 import { WordService } from '../../../../services/word.service';
-import { ConfirmDialogComponent } from '../../../shared/confirm-dialog.component';
 import { ComponentDeactivateGuard } from '../../../../guards/component-deactivate.guard';
 import { TranslateWord } from '../../../../models/translate-word.class';
-import { Word } from '../../../../models/word.class';
 
 @Component({
   template: `

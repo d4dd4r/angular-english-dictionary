@@ -15,7 +15,7 @@ import { WordDialog } from '../../../../models/word-dialog.interface';
           <mat-error *ngIf="form.get('english').hasError('required')">You must enter a value</mat-error>
         </mat-form-field>
         <div formArrayName="translates">
-          <mat-form-field class="full-width" *ngFor="let translate of form.get('translates').controls; let i = index">
+          <mat-form-field class="full-width" *ngFor="let translate of translates; let i = index">
             <input matInput [formControlName]="i" placeholder="Translate" required>
             <button mat-button matSuffix mat-icon-button
                 *ngIf="i !== 0"
@@ -47,6 +47,7 @@ import { WordDialog } from '../../../../models/word-dialog.interface';
 })
 export class WordDialogComponent implements OnInit {
   public form: FormGroup;
+  public translates: FormControl[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,10 +59,11 @@ export class WordDialogComponent implements OnInit {
     const english = this.dialogData.word ? this.dialogData.word.english : '';
     const known = this.dialogData.word ? this.dialogData.word.type === WORD_TYPES.KNOWN : false;
 
+    this.translates = this.fillFormArray();
     this.form = this.formBuilder.group({
       english: [english, [Validators.required]],
       translates: this.formBuilder.array(
-        this.fillFormArray()
+        this.translates
       ),
       known: [known, []]
     });

@@ -1,4 +1,5 @@
 import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
+import * as _ from 'lodash';
 
 import { Word } from '../../../models/word.class';
 import { WordService } from '../../../services/word.service';
@@ -71,11 +72,11 @@ export class Exercise {
     this._currentWordCount = value;
   }
 
-  protected get gameOver() {
+  public get gameOver() {
     return this._gameOver;
   }
 
-  protected set gameOver(value: boolean) {
+  public set gameOver(value: boolean) {
     this._gameOver = value;
   }
 
