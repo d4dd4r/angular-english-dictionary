@@ -1,13 +1,14 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/first';
 
 import { Word, WORD_TYPES } from '../../../models/word.class';
 import { WordDialog } from '../../../models/word-dialog.interface';
-import { WordService } from '../../../services/word.service';
+import { FbWordService } from '../../../services/fb-word.service';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog.component';
 import { WordDialogComponent } from './word-dialog/word-dialog.component';
 
@@ -21,7 +22,7 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
             <span class="english">Word</span>
             <span class="translate">Translate</span>
             <span class="actions">
-              <mat-checkbox align="end" (click)="onTypeChange()">Show known words too</mat-checkbox>
+              <mat-checkbox align="end" (click)="isShowAllWords = !isShowAllWords">Show known words too</mat-checkbox>
               <button mat-raised-button matSuffix color="primary"
                   (click)="openWordDialog('Add new word')">Add new</button>
             </span>
@@ -31,7 +32,10 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
     </div>
     <div class="wrapper">
       <mat-nav-list>
-        <mat-list-item *ngFor="let word of words; let i = index" [ngClass]="{ known: word.type === knownType }">
+        <ng-container *ngFor="let word of words | async; let i = index">
+          <mat-list-item
+            *ngIf="word.type === wordTypes.NEW || (isShowAllWords && word.type === wordTypes.KNOWN)"
+            [ngClass]="{ known: word.type === wordTypes.KNOWN }">
           <div class="row">
             <span class="index">{{ i + 1 }}</span>
             <span class="english">{{ word.english }}</span>
@@ -53,34 +57,34 @@ import { WordDialogComponent } from './word-dialog/word-dialog.component';
             </span>
           </div>
         </mat-list-item>
+        </ng-container>
       </mat-nav-list>
     </div>
   `,
   styleUrls: ['./dictionary.component.css']
 })
-export class DictionaryComponent implements OnDestroy {
-  public words: Word[];
-  public checkboxLever = false;
-  public knownType = WORD_TYPES.KNOWN;
+export class DictionaryComponent implements OnInit, OnDestroy {
+  public words: Observable<Word[]>;
+  public isShowAllWords = false;
+  public wordTypes = WORD_TYPES;
   private editMode = false;
-  private editWordId: number;
+  private editWordId: string;
   private wordDialogRef: MatDialogRef<WordDialogComponent>;
   private confirmDialogRef: MatDialogRef<ConfirmDialogComponent>;
   private subscription: Subscription;
 
   constructor(
     private dialog: MatDialog,
-    private wordS: WordService,
+    private fbWordS: FbWordService,
     private snackBar: MatSnackBar,
-  ) {
-    this.words = this.wordS.words;
-    this.subscription = this.wordS.onWordUpdate
-      .subscribe(words => this.checkboxLever ? this.words = this.wordS.allWords : this.words = words)
-    ;
+  ) {}
+
+  ngOnInit() {
+    this.words = this.fbWordS.words;
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 
   openWordDialog(title: string, word?: Word) {
@@ -95,13 +99,14 @@ export class DictionaryComponent implements OnDestroy {
         if (!result) return;
 
         const wordType = result.known ? WORD_TYPES.KNOWN : WORD_TYPES.NEW;
+        const newWord = new Word(result.english, result.translates, wordType);
 
         if (this.editMode) {
-          this.wordS.updateWord(result, this.editWordId);
-          this.disableEditMoide();
+          this.fbWordS.updateWord(newWord, this.editWordId);
+          this.disableEditMode();
           this.openSnackBar('Word is successfully changed');
         } else {
-          this.wordS.word = new Word(result.english, result.translates, wordType);
+          this.fbWordS.word = newWord;
           this.openSnackBar('Word is successfully added');
         }
       })
@@ -110,7 +115,7 @@ export class DictionaryComponent implements OnDestroy {
 
   onEdit(word: Word) {
     this.editMode = true;
-    this.editWordId = word.id;
+    this.editWordId = word.english.toLowerCase();
     this.openWordDialog('Edit the word', word);
   }
 
@@ -124,19 +129,14 @@ export class DictionaryComponent implements OnDestroy {
       .first()
       .subscribe((isConfirm: boolean) => {
         if (isConfirm) {
-          this.wordS.removeWord(word.id);
+          this.fbWordS.removeWord(word);
           this.openSnackBar('Word is successfully removed');
         }
       })
     ;
   }
 
-  onTypeChange() {
-    this.words = this.checkboxLever ? this.wordS.words : this.wordS.allWords;
-    this.checkboxLever = !this.checkboxLever;
-  }
-
-  private disableEditMoide() {
+  private disableEditMode() {
     this.editMode = false;
     this.editWordId = null;
   }

@@ -70,9 +70,9 @@ export class WordDialogComponent implements OnInit {
   }
 
   onAddTranslate() {
-    (<FormArray>this.form.get('translates')).push(
-      this.formBuilder.control('', [Validators.required])
-    );
+    const wordControl = this.formBuilder.control('', [Validators.required]);
+    this.translates.push(wordControl);
+    (<FormArray>this.form.get('translates')).push(wordControl);
   }
 
   onSubmit(values: WordDialog) {
@@ -81,6 +81,7 @@ export class WordDialogComponent implements OnInit {
 
   onDelete(event: MouseEvent, index: number) {
     event.preventDefault();
+    this.translates.splice(index, 1);
     (<FormArray>this.form.get('translates')).removeAt(index);
   }
 
