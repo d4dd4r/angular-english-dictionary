@@ -82,7 +82,7 @@ export class ExercisesComponent {
     private router: Router,
     private wordS: WordService,
   ) {
-    this.wordCount = this.wordS.allWords.length;
+    this.wordCount = this.wordS.words.value.length;
   }
 
   onLearnWords() {

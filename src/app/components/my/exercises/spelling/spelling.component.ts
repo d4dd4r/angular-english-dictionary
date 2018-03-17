@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { Exercise } from '../exercise.parent';
 import { WordService } from '../../../../services/word.service';
 import { ComponentDeactivateGuard } from '../../../../guards/component-deactivate.guard';
+
 import { TranslateWord } from '../../../../models/translate-word.class';
 
 @Component({
@@ -103,14 +104,13 @@ export class SpellingComponent extends Exercise implements OnInit, AfterViewInit
 
   private runExercise() {
     this.currentWord = this.shuffledWords.shift();
-    console.log('this.currentWord', this.currentWord);
     this.currentTranslateWord = this.getTranslateWord();
     if (this.field) this.field.nativeElement.focus();
   }
 
   private getTranslateWord(): TranslateWord {
     return new TranslateWord(
-      this.currentWord.id,
+      this.currentWord.english.toLowerCase(),
       _.sample(this.currentWord.russian)
     );
   }

@@ -16,7 +16,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthGuard } from './guards/auth.guard';
 import { ComponentDeactivateGuard } from './guards/component-deactivate.guard';
 import { LoginGuard } from './guards/login.guard';
-import { LearnWordsResolver } from './resolvers/learn-words.resolver';
+import { WordsResolver } from './resolvers/words.resolver';
 import { AuthService } from './services/auth.service';
 import { WordService } from './services/word.service';
 
@@ -62,7 +62,7 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog.compo
     AuthGuard,
     ComponentDeactivateGuard,
     LoginGuard,
-    LearnWordsResolver,
+    WordsResolver,
     AuthService,
     WordService,
   ],

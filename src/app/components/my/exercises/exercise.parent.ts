@@ -20,7 +20,7 @@ export class Exercise {
     private wordS: WordService,
     private dialog: MatDialog,
   ) {
-    this.allWords = wordS.allWords;
+    this.allWords = this.wordS.words.value;
     this.shuffledWords = this.getShuffledWords();
   }
 
@@ -122,7 +122,7 @@ export class Exercise {
   protected openSnackBar(message: string) {
     this.snackBar.open(message, null, {
       duration: 2000,
-      panelClass: 'primary'
+      panelClass: 'primary',
     });
   }
 

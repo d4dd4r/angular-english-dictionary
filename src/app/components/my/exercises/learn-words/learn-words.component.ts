@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import * as _ from 'lodash';
 
 import { Exercise } from '../exercise.parent';
 import { WordService } from '../../../../services/word.service';
 import { ComponentDeactivateGuard } from '../../../../guards/component-deactivate.guard';
+
 import { TranslateWord } from '../../../../models/translate-word.class';
 import { Word } from '../../../../models/word.class';
 
@@ -17,7 +17,7 @@ import { Word } from '../../../../models/word.class';
           <mat-grid-tile colspan="3">
             <h2>{{ currentWord.english }}</h2>
           </mat-grid-tile>
-          <mat-grid-tile *ngFor="let translate of currentTranslates; let i = index">
+          <mat-grid-tile *ngFor="let translate of currentTranslates">
             <button mat-button (click)="checkAnswer(translate.id)">
               {{ translate.translate }}
             </button>
@@ -45,7 +45,6 @@ export class LearnWordsComponent extends Exercise implements OnInit, ComponentDe
   private translateLimitCount = 6;
 
   constructor(
-    private route: ActivatedRoute,
     snackBar: MatSnackBar,
     wordS: WordService,
     dialog: MatDialog,
@@ -57,8 +56,8 @@ export class LearnWordsComponent extends Exercise implements OnInit, ComponentDe
     this.runExercise();
   }
 
-  checkAnswer(id: number) {
-    if (id === this.currentWord.id) ++this.successMatches && this.openSnackBar('Success');
+  checkAnswer(id: string) {
+    if (id === this.currentWord.english.toLowerCase()) ++this.successMatches && this.openSnackBar('Success');
     else this.openSnackBar('Fail');
 
     this.checkStatus();
@@ -88,7 +87,7 @@ export class LearnWordsComponent extends Exercise implements OnInit, ComponentDe
   private getRandomWords(currentWord: Word): TranslateWord[] {
     let shuffledCards = _.chain(this.allWords)
       .shuffle()
-      .pullAllBy([currentWord], 'id')
+      .pullAllBy([currentWord], 'english')
       .take(this.translateLimitCount - 1)
       .value()
     ;
@@ -96,7 +95,7 @@ export class LearnWordsComponent extends Exercise implements OnInit, ComponentDe
 
     return _.chain(shuffledCards)
       .shuffle()
-      .map((word: Word) => new TranslateWord(word.id, _.sample(word.russian)))
+      .map((word: Word) => new TranslateWord(word.english.toLowerCase(), _.sample(word.russian)))
       .value()
     ;
   }

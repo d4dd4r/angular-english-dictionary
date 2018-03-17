@@ -12,7 +12,7 @@ import { SpellingComponent } from './components/my/exercises/spelling/spelling.c
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { ComponentDeactivateGuard } from './guards/component-deactivate.guard';
-import { LearnWordsResolver } from './resolvers/learn-words.resolver';
+import { WordsResolver } from './resolvers/words.resolver';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/signin' },
@@ -22,6 +22,7 @@ const routes: Routes = [
   {
     path: 'my',
     component: MyComponent,
+    resolve: { words: WordsResolver },
     canActivateChild: [AuthGuard],
     children: [
       { path: 'dictionary', component: DictionaryComponent },
@@ -33,7 +34,6 @@ const routes: Routes = [
           {
             path: 'learn-words',
             canDeactivate: [ComponentDeactivateGuard],
-            resolve: { words: LearnWordsResolver },
             component: LearnWordsComponent,
           },
           {

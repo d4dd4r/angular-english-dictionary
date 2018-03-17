@@ -1,76 +1,60 @@
-import { Word, WORD_TYPES } from '../models/word.class';
-import { WordDialog } from '../models/word-dialog.interface';
+import { Injectable } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { Subject } from 'rxjs/Subject';
+import { AuthService } from './auth.service';
+import { Word } from '../models/word.class';
 
+@Injectable()
 export class WordService {
-  public onWordUpdate = new Subject<Word[]>();
-  private _words: Word[] = [];
-  private lastId = 0;
+  public words = new BehaviorSubject<Word[]>([]);
+  private wordCol: AngularFirestoreCollection<Word>;
 
-  constructor() {
-    this.words = [
-      new Word('padding',   ['набивка', 'набивочный материал']),
-      new Word('throw',     ['выкидывать', 'выбрасывать'], WORD_TYPES.KNOWN),
-      new Word('quash',     ['подавлять', 'сокрушить'], WORD_TYPES.KNOWN),
-      new Word('grind',     ['молоть', 'перемалывать']),
-      new Word('reject',    ['отвергать', 'отклонять']),
-      new Word('stuffing',  ['начинка', 'наполнение'], WORD_TYPES.KNOWN),
-      new Word('give up',   ['сдаваться', 'уступить']),
-      new Word('hope',      ['надежда', 'надеяться']),
-      new Word('oblique',   ['косой', 'наклонный']),
-      new Word('place',     ['место', 'местечко'], WORD_TYPES.KNOWN),
-      new Word('beat',      ['бить', 'колотить'], WORD_TYPES.KNOWN),
-      new Word('hammer',    ['молоток', 'молот'], WORD_TYPES.KNOWN),
-      new Word('smite',     ['поразить', 'кара']),
-      new Word('slash',     ['разрез', 'порез']),
-      new Word('bare',      ['голый', 'пустой']),
-      new Word('flank',     ['фланг', 'крыло']),
-      new Word('slope',     ['склон', 'откос']),
-      new Word('house',     ['дом', 'здание']),
-      new Word('meat',      ['мясо', 'фарш']),
-      new Word('stroke',    ['ход', 'удар']),
-    ];
-  }
+  constructor(
+    private authS: AuthService,
+    private fsS: AngularFirestore,
+  ) {}
 
-  public get words(): Word[] {
-    return this._words.filter(word => word.type === WORD_TYPES.NEW);
+  public init() {
+    const user = this.authS.getCurrentUser();
+    if (user) {
+      this.wordCol = this.fsS
+        .collection('users')
+        .doc(user.email)
+        .collection('words')
+      ;
+
+      this.wordCol.valueChanges()
+        .subscribe(words => this.words.next(words))
+      ;
+    }
   }
 
   public set word(word: Word) {
-    word.id = ++this.lastId;
-    this._words.push(word);
-    this.onWordUpdate.next(this.words);
+    this.wordCol.doc(word.english.toLowerCase()).set({ ...word })
+      .catch(err => console.log('err', err))
+    ;
   }
 
-  public get knownWords(): Word[] {
-    return this._words.filter(word => word.type === WORD_TYPES.KNOWN);
+  public updateWord(word: Word, id: string) {
+    const newId = word.english.toLowerCase();
+    if (newId === id) {
+      this.wordCol.doc(id).update({ ...word })
+        .catch(err => console.log('err', err))
+      ;
+    } else {
+      Promise.all([
+        this.wordCol.doc(id).delete(),
+        this.wordCol.doc(newId).set({ ...word })
+      ]).catch(
+        err => console.log('err', err)
+      );
+    }
   }
 
-  public get allWords(): Word[] {
-    return this._words.filter(word => word.type !== WORD_TYPES.REMOVED);
+  public removeWord(word: Word) {
+    this.wordCol.doc(word.english.toLowerCase()).delete()
+      .catch(err => console.log('err', err))
+    ;
   }
-
-  public set words(words: Word[]) {
-    words.forEach(word => this.word = word);
-  }
-
-  getWordById(id: number): Word {
-    return this._words.find(word => word.id === id);
-  }
-
-  updateWord(word: WordDialog, id: number) {
-    const index = this._words.findIndex(word => word.id === id);
-    this._words[index].english = word.english;
-    this._words[index].russian = word.translates;
-    this._words[index].type = word.known ? WORD_TYPES.KNOWN : WORD_TYPES.NEW;
-    this.onWordUpdate.next(this.words);
-  }
-
-  removeWord(id: number) {
-    const index = this._words.findIndex(word => word.id === id);
-    this._words[index].type = WORD_TYPES.REMOVED;
-    this.onWordUpdate.next(this.words);
-  }
-
 }

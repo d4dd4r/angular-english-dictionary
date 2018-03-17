@@ -1,6 +1,6 @@
 export class TranslateWord {
   constructor(
-    public id: number,
+    public id: string,
     public translate: string,
   ) {}
-} 
+}

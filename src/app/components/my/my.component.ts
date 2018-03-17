@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FbWordService } from '../../services/fb-word.service';
 import { NavbarLinks } from '../../models/navbar-links.class';
 
 @Component({
-  providers: [FbWordService],
   template: `
     <app-navbar [links]="links"></app-navbar>
     <div class="body">
